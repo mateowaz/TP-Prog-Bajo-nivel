@@ -26,7 +26,6 @@ typedef struct Nodo {
     void *dato;
     tipoDato tipo;
     struct Nodo *siguiente; 
-    Alumno datos; 
 } Nodo;
 
 void MostrarMenu();

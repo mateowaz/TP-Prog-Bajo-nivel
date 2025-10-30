@@ -340,36 +340,38 @@ Nodo* Modificar(Nodo *Head){
             printf("Error Alumno no encontrado \n");
             return Head;
         }
-    while (indice != NULL){
-      if(indice->datos.Legajo == LegajoBuscado){
-        printf("Alumno %s encontrado, porfavor cambie los datos: \n", indice->datos.nombre);
+   while (indice != NULL) {
+    if (indice->tipo == tipo_Alumno) {
+        Alumno *alum = (Alumno *)indice->dato;
 
-       //nombre
-        printf("Ingrese nuevo nombre: \n");
-        scanf("%s", indice->datos.nombre);
-        while (getchar() != '\n');
+        if (alum->Legajo == LegajoBuscado) {
+            printf("Alumno %s encontrado.\n", alum->nombre);
 
-        //edad
-        printf("Ingrese nueva edad: \n");
-        if (scanf("%d", &indice->datos.edad) != 1) {
-                 // Limpiar buffer si la edad es inválida
-                while (getchar() != '\n'); 
-                printf("Edad inválida, se conservará la edad anterior.\n");
+            printf("Ingrese nuevo nombre: ");
+            if(scanf("%s", alum->nombre) != 1){
+                while (getchar() != '\n');
+                printf("Nombre invalido.\n");
             }
-            while (getchar() != '\n');
+                
+            printf("Ingrese nueva edad: ");
+            if (scanf("%d", &alum->edad) != 1) {
+                printf("Edad inválida.\n");
+                while (getchar() != '\n');
+            }
 
-        printf("\n Datos de Alumno (Legajo: %d) modificados con Exito! \n ", indice->datos.Legajo);
-        printf("Nuevo nombre: %s  \n", indice->datos.nombre);
-        printf("Nueva edad: %d  \n", indice->datos.edad);
-        return Head;
-        
-      }
-      indice = indice->siguiente;
+            printf("\nDatos modificados con éxito.\n");
+            printf("Nuevo nombre: %s\n", alum->nombre);
+            printf("Nueva edad: %d\n", alum->edad);
+            return Head;
+        }
     }
+    indice = indice->siguiente;
+}
     //devolvemos error si no fue encontrado
      printf("\n Alumno no encontrado, Legajo: %d no encontrado \n ", LegajoBuscado);
      return Head;
 }
+
 
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
     Nodo *indice = Head;
