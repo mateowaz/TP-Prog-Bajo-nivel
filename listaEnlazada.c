@@ -312,12 +312,20 @@ Nodo* Modificar(Nodo *Head){
         //si el dato no es un entero, se rompe
         if(scanf("%d", &indice->datos.edad !=1)){
             printf("Edad invalida");
+
         }
 
+        printf("\n Datos de Alumno (Legajo: %d) modificados con Exito! \n ", indice->datos.Legajo);
+        printf("Nuevo nombre: %s  \n", indice->datos.nombre);
+        printf("Nueva edad: %d  \n", indice->datos.edad);
+        return Head;
+        
       }
+      indice = indice->siguiente;
     }
-    
-
+    //devolvemos error si no fue encontrado
+     printf("\n Alumno no encontrado, Legajo: %d no encontrado \n ", indice->datos.Legajo);
+     return Head
 }
 
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
