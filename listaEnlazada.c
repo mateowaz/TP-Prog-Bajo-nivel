@@ -7,53 +7,63 @@
 int main() {
     
    Nodo *Lista = NULL;
+   int opcion = 0;
 
-   Alumno e1;
-   strcpy(e1.nombre, "Martin");
-   e1.edad = 10;
-   e1.Legajo = 124124;
-   e1.promedio = 7.7;
-
-   Alumno e2;
-   strcpy(e2.nombre, "Jose");
-   e2.edad = 20;
-   e2.Legajo = 52131;
-   e2.promedio = 4.5;
-
-   Alumno e3;
-   strcpy(e3.nombre, "Steban");
-   e3.edad = 25;
-   e3.Legajo = 52231;
-   e3.promedio = 8.5;
-
+   Alumno e1 = {"Martin", 10, 4.4, 777};
+   Alumno e2 = {"Manuel", 15, 6.8 , 8}; 
+   Alumno e3 = {"Steban", 16, 8.2, 4};
+    
    Lista = agregar(copiar_estudiante(e1), tipo_Alumno, Lista);
    printf("\n");
    Lista = agregar(copiar_estudiante(e2), tipo_Alumno, Lista);
     printf("\n");
    Lista = agregar(copiar_estudiante(e3), tipo_Alumno, Lista);
 
- 
-  
    printf("Lista actual:\n");
     ListarEst(Lista);
 
-  Lista = DarDeAlta(Lista);
+    do{
+        MostrarMenu();
 
-   int largo = LargoLista(Lista);
-   printf("el largo es: %d \n" ,largo);
+        if (scanf("%d", &opcion) != 1) {
+            // Limpiar buffer en caso de entrada no numérica
+            while (getchar() != '\n');
+            opcion = -1; // Opción inválida
+        } else {
+            // Limpiar el caracter de nueva línea restante
+            while (getchar() != '\n'); 
+        }
 
-  printf("Lista actual:\n");
-    ListarEst(Lista);
+        switch (opcion)
+        {
+        case 1:
+            Lista = DarDeAlta(Lista);
+            break;
+        case 2: 
+            Lista = Modificar(Lista);
+            break;
+        case 3:
+            ListarEst(Lista);
+            break;
+        case 4:
+            LargoLista(Lista);
+            break;
+    
+        case 0:
+            printf("\nSaliendo del programa. Liberando memoria...\n");
+            break;
+        
+        default:
+            printf("\nOpción no válida. Intente de nuevo.\n");
+            break;
+        }
+    }
+    while (opcion != 0);
 
-   Lista = EliminarEst(Lista, 52231);
-   Lista = BuscarPorNombre(Lista, "Jose");
-   
-   printf("La lista es: \n");
-   ListarEst(Lista);
-
- 
-
-   return 0;
+   //Liberación de Memoria al salir 
+    LiberarEspacioLista(Lista); 
+    
+    return 0;       
 } 
 
 
@@ -214,7 +224,8 @@ int LargoLista(Nodo *Head){
       sum++;
       Indice = Indice->siguiente;
     }
-    return sum;
+   
+    return printf("El largo de la lista es: %d", sum);
   }
 
 //Ayuda a crear una copia de un int para agregar  
@@ -230,6 +241,32 @@ void *copiar_int(int valor) {
 void *copiar_string(const char *str) {
   //strdup asigna memoria y copia la cadena
     return (void*)strdup(str);
+}
+
+void LiberarEspacioLista(Nodo *Head){   
+    Nodo *Actual = Head;
+    Nodo *Siguiente = NULL;
+
+    while (Actual != NULL)
+    {
+    //avanzamos y liberamos el nodo actual
+     Siguiente = Actual->siguiente;
+     free(Actual);
+     Actual = Siguiente;
+    }
+    
+}
+
+void MostrarMenu(){
+    printf("\n=====================================\n");
+    printf("       GESTOR DE ALUMNOS       \n");
+    printf("=====================================\n");
+    printf("1. Dar de Alta (Agregar nuevo alumno)\n");
+    printf("2. Modificar alumno por Legajo\n");
+    printf("3. Listar todos los alumnos\n");
+    printf("4. Mostrar largo de la lista\n");
+    printf("0. Salir\n");
+    printf("Ingrese su opción: ");
 }
 
 void *copiar_estudiante(Alumno est){
@@ -266,9 +303,10 @@ Nodo* DarDeAlta(Nodo *Head){
   printf("Nombre: \n");
   scanf("%s", NuevoAlumno.nombre);
   printf("Edad: \n");
-  scanf("%d", NuevoAlumno.edad);
+  //scanf siempre necesita la dirección de memoria
+  scanf("%d", &NuevoAlumno.edad);
   printf("Legajo: \n");
-  scanf("%d", NuevoAlumno.Legajo);
+  scanf("%d", &NuevoAlumno.Legajo);
 
   void *DatosCopiados = copiar_estudiante(NuevoAlumno);
   if(DatosCopiados == NULL){
@@ -296,7 +334,7 @@ Nodo* Modificar(Nodo *Head){
 
 
     printf("Ingrese el Legajo del Alumno: ");
-        if(scanf(" %d", &LegajoBuscado) != 1){
+        if(scanf("%d", &LegajoBuscado) != 1){
             //eliminar cualquier carácter restante 
             while (getchar() != '\n');
             printf("Error Alumno no encontrado \n");
@@ -305,15 +343,20 @@ Nodo* Modificar(Nodo *Head){
     while (indice != NULL){
       if(indice->datos.Legajo == LegajoBuscado){
         printf("Alumno %s encontrado, porfavor cambie los datos: \n", indice->datos.nombre);
+
+       //nombre
         printf("Ingrese nuevo nombre: \n");
         scanf("%s", indice->datos.nombre);
-        printf("Ingrese nueva edad: \n");
-        scanf("%d", indice->datos.edad);
-        //si el dato no es un entero, se rompe
-        if(scanf("%d", &indice->datos.edad !=1)){
-            printf("Edad invalida");
+        while (getchar() != '\n');
 
-        }
+        //edad
+        printf("Ingrese nueva edad: \n");
+        if (scanf("%d", &indice->datos.edad) != 1) {
+                 // Limpiar buffer si la edad es inválida
+                while (getchar() != '\n'); 
+                printf("Edad inválida, se conservará la edad anterior.\n");
+            }
+            while (getchar() != '\n');
 
         printf("\n Datos de Alumno (Legajo: %d) modificados con Exito! \n ", indice->datos.Legajo);
         printf("Nuevo nombre: %s  \n", indice->datos.nombre);
@@ -324,7 +367,7 @@ Nodo* Modificar(Nodo *Head){
       indice = indice->siguiente;
     }
     //devolvemos error si no fue encontrado
-     printf("\n Alumno no encontrado, Legajo: %d no encontrado \n ", indice->datos.Legajo);
+     printf("\n Alumno no encontrado, Legajo: %d no encontrado \n ", LegajoBuscado);
      return Head;
 }
 

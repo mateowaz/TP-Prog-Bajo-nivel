@@ -29,18 +29,22 @@ typedef struct Nodo {
     Alumno datos; 
 } Nodo;
 
+void MostrarMenu();
 
-
+//Lista
 Nodo* ObtenerUltimo(Nodo *Head);
 Nodo* agregar(void *dato, tipoDato tipo, Nodo *Head);
 Nodo *Buscar(void *DatoBuscado, tipoDato TipoBuscado, Nodo *Head);
 Nodo* eliminar(void *DatoBuscado, tipoDato TipoBuscado, Nodo *Head);
 void ImprimirLista(Nodo *Head);
 int LargoLista(Nodo *Head);
+void LiberarEspacioLista(Nodo *Head);
 void *copiar_int (int valor);
 void *copiar_string(const char *str);
 void *copiar_estudiante(Alumno est);
 
+
+//Estudiantes
 Nodo* DarDeAlta(Nodo *Head);
 void ListarEst(Nodo *Head);
 Nodo* Modificar(Nodo *Head);
