@@ -48,7 +48,31 @@ int main() {
         case 4:
             LargoLista(Lista);
             break;
-    
+
+        case 5: 
+            char nombreBuscado[50]; //Maximo de la entrada
+
+            printf("Ingrese el Nombre del Alumno a buscar: ");
+            scanf("%s", nombreBuscado); // Lee el nombre ingresado por el usuario
+            while (getchar() != '\n'); // Limpiar el buffer
+
+            //llamada a la funcion
+            Nodo *encontrado = BuscarPorNombre(Lista, nombreBuscado);
+
+            // Manejar el resultado de la búsqueda si es necesario
+            if (encontrado != NULL) {
+            // Ya se imprimió la información en BuscarPorNombre
+                        }
+            break;
+        
+        case 6:
+
+         break; 
+         
+        case 7:
+           Lista = EliminarEst(Lista);             
+        break;
+                
         case 0:
             printf("\nSaliendo del programa. Liberando memoria...\n");
             break;
@@ -265,6 +289,9 @@ void MostrarMenu(){
     printf("2. Modificar alumno por Legajo\n");
     printf("3. Listar todos los alumnos\n");
     printf("4. Mostrar largo de la lista\n");
+    printf("5. Buscar Alumno por Nombre\n");
+    printf("6. Buscar Alumnos por Edad\n");
+    printf("7. Eliminar Alumno\n");
     printf("0. Salir\n");
     printf("Ingrese su opción: ");
 }
@@ -375,21 +402,22 @@ Nodo* Modificar(Nodo *Head){
 
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
     Nodo *indice = Head;
-    
+    printf("Ingrese el Nombre del Alumno: ");
     while (indice != NULL){
-        
         if(indice->tipo == tipo_Alumno){
-            Alumno *e = (Alumno *)indice->dato;
-            //strcmp devuelve 0 si las cadenas son iguales.
-            if (strcmp(e->nombre, nombBuscado) == 0){
-                
-                printf("Alumno: %s\n", e->nombre);
-                return indice; 
-            }
+            Alumno *alum = (Alumno *)indice->dato;
+
+        if (strcmp(alum->nombre, nombBuscado) == 0){
+            printf("Alumno %s encontrado.\n", alum->nombre);
+            printf("- Datos de Alumno - \n");
+            printf("Nombre: %s, Edad: %d, Promedio: %f, Legajo: %d ", alum->nombre, alum->edad, alum->promedio, alum->Legajo);
+           return indice; 
         }
-        indice = indice->siguiente;
     }
-    return NULL;
+    indice = indice->siguiente;
+}
+printf("Alumno no encontrado");
+return NULL;
 }
 
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad) {
@@ -418,36 +446,56 @@ void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad) {
     printf("--- Fin de la Busqueda (Total: %d) ---\n", contador);
 }
 
-Nodo* EliminarEst(Nodo *Head, int legajoBuscado) {
+Nodo* EliminarEst(Nodo *Head) {
     Nodo *actual = Head;
     Nodo *previo = NULL;
+    int LegajoBuscado;
 
+    // Verificamos si la lista está vacía
+    if (Head == NULL) {
+        printf("Lista vacía. No hay alumnos para eliminar.\n");
+        return Head;
+    }
+
+    printf("Ingrese el Legajo del Alumno: ");
+    if (scanf("%d", &LegajoBuscado) != 1) {
+        // Eliminar cualquier carácter restante
+        while (getchar() != '\n');
+        printf("Entrada inválida. Intente de nuevo.\n");
+        return Head;
+    }
+    while (getchar() != '\n'); // limpiar buffer
+
+    // Recorremos la lista
     while (actual != NULL) {
-        
-        int encontrado = 0;
         if (actual->tipo == tipo_Alumno) {
-            Alumno *e = (Alumno *)actual->dato; 
-            if (e->Legajo == legajoBuscado) {
-                encontrado = 1;
+            Alumno *e = (Alumno *)actual->dato;
+
+            if (e->Legajo == LegajoBuscado) {
+                // Encontrado → eliminamos el nodo
+                if (previo == NULL) {
+                    // Caso: el nodo a eliminar es el primero
+                    Head = actual->siguiente;
+                } else {
+                    // Caso: nodo intermedio o final
+                    previo->siguiente = actual->siguiente;
+                }
+                
+
+                free(actual->dato);     // liberar el dato (Alumno)
+                free(actual);    // liberar el nodo
+                printf("Alumno con legajo %d eliminado correctamente.\n", LegajoBuscado);
+                return Head;
             }
         }
-        
-        if (encontrado) {
-            if (previo == NULL) {
-                Head = actual->siguiente;
-            } else {
-                previo->siguiente = actual->siguiente;
-            }
-            
-            free((void *)actual->dato);
-            free(actual);
-            
-            return Head; 
-        }
-        
+
+        // Avanzamos en la lista
         previo = actual;
         actual = actual->siguiente;
-      }
+    }
+
+    // Si llegamos aquí, no se encontró el alumno
+    printf("No se encontró ningún alumno con el legajo %d.\n", LegajoBuscado);
     return Head;
 }
 
