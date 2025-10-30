@@ -325,7 +325,7 @@ Nodo* Modificar(Nodo *Head){
     }
     //devolvemos error si no fue encontrado
      printf("\n Alumno no encontrado, Legajo: %d no encontrado \n ", indice->datos.Legajo);
-     return Head
+     return Head;
 }
 
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){

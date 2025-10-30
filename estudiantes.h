@@ -43,7 +43,7 @@ void *copiar_estudiante(Alumno est);
 
 Nodo* DarDeAlta(Nodo *Head);
 void ListarEst(Nodo *Head);
-void modificarEst();
+Nodo* Modificar(Nodo *Head);
 Nodo* EliminarEst(Nodo *Head, int legajoBuscado);
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
