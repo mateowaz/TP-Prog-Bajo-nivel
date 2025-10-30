@@ -66,7 +66,29 @@ int main() {
             break;
         
         case 6:
-
+          int minEdad;
+          int maxEdad;
+          printf("Ingrese el rango de edad de los Alumnos a buscar: \n");
+          printf("Ingrese el rango minimo: \n");
+          if (scanf("%d", &maxEdad) != 1) {
+          while (getchar() != '\n');
+            printf("Entrada minima invalida.\n");
+            break;
+            }
+          while (getchar() != '\n');
+          printf("Ingrese el rango maximo: \n");
+          if (scanf("%d", &maxEdad) != 1) {
+          while (getchar() != '\n');
+            printf("Entrada máxima invalida.\n");
+            break;
+            }
+            while (getchar() != '\n');
+          if (minEdad > maxEdad) {
+            printf("El rango mínimo no puede ser mayor que el máximo.\n");
+         break;
+    }
+            
+         BuscarPorEdad(Lista, minEdad, maxEdad);
          break; 
          
         case 7:
@@ -331,7 +353,10 @@ Nodo* DarDeAlta(Nodo *Head){
   scanf("%s", NuevoAlumno.nombre);
   printf("Edad: \n");
   //scanf siempre necesita la dirección de memoria
-  scanf("%d", &NuevoAlumno.edad);
+  if (scanf("%d", &NuevoAlumno.edad) != 1) {
+    printf("Edad inválida.\n");
+    while (getchar() != '\n');
+            };
   printf("Legajo: \n");
   scanf("%d", &NuevoAlumno.Legajo);
 
