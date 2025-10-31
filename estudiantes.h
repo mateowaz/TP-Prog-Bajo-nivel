@@ -20,6 +20,7 @@ int Legajo;
 
 typedef struct{ 
 char nombre[Max_nombre];
+int cantidadAlumnos;
 }Materia;
 
 typedef struct Nodo {
@@ -50,3 +51,14 @@ Nodo* Modificar(Nodo *Head);
 Nodo* EliminarEst(Nodo *Head);
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
+
+
+//Materias
+void *copiar_Materia(Materia m);
+Nodo* DarDeAltaMateria(Nodo *Head);
+void ListarMat(Nodo *Head);
+Nodo* ModificarMat(Nodo *Head);
+Nodo* EliminarMat(Nodo *Head);
+Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
+void AnotarseMateria(Nodo *Head, int LegajoBuscado);
+void RendirMateria(Nodo *Head, int LegajoBuscado);
