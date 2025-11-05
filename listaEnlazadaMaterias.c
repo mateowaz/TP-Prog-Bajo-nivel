@@ -3,6 +3,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+int main(){
+
+  Nodo *Lista = NULL;
+  Materia m1 = {"Algebra", 10};
+  Lista = agregar(copiar_Materia(m1) ,tipo_Materia, Lista);
+  printf("Materias: \n ");
+  ListarMat(Lista);
+
+  printf("Ingrese materia \n");
+  Lista = DarDeAltaMateria(Lista);
+  printf("Materias: \n ");
+  ListarMat(Lista);
+  LiberarEspacioLista(Lista); 
+  return 0;
+}
+
 
 Nodo* ObtenerUltimo(Nodo *Head){
 
@@ -203,3 +219,36 @@ void *copiar_Materia(Materia m){
   *nuevaMateria = m;
   return (void*)nuevaMateria;
 }
+
+Nodo* DarDeAltaMateria(Nodo *Head){
+  Materia NuevaMateria;
+  printf("Porfavor ingrese los datos de la nueva Materia: \n");
+  printf("Nombre: ");
+  //%29s es el limite de caracteres para escribir el nombre de la materia
+  scanf("%29s", NuevaMateria.nombre);
+
+  NuevaMateria.cantidadAlumnos = 0;
+
+  void *datos = copiar_Materia(NuevaMateria);
+  if(datos == NULL){
+    printf("Error al generar Materia");
+    return Head;
+  }
+  Head = agregar(datos, tipo_Alumno, Head);
+  printf("Materia %s agregada exitosamente!", NuevaMateria.nombre);
+  return Head;
+
+}
+
+void ListarMat(Nodo *Head){
+  Nodo *Acutal = Head;
+   printf("--- Inicio de la Lista ---\n");
+
+  while (Acutal != NULL){
+    Materia *m = (Materia *)Acutal->dato;
+    printf("Nombre: %s, Cant. Alumnos: %d \n", m->nombre, m->cantidadAlumnos );
+    Acutal =  Acutal->siguiente;
+  }
+     printf("--- Fin de la Lista ---\n");
+
+  }

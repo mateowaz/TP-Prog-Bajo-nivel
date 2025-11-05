@@ -350,7 +350,7 @@ Nodo* DarDeAlta(Nodo *Head){
   
   printf("Porfavor ingrese sus datos: \n");
   printf("Nombre: \n");
-  scanf("%s", NuevoAlumno.nombre);
+  scanf("%29s", NuevoAlumno.nombre);
   printf("Edad: \n");
   //scanf siempre necesita la dirección de memoria
   if (scanf("%d", &NuevoAlumno.edad) != 1) {
