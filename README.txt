@@ -31,4 +31,3 @@ Profesor: Martín Rodríguez
 
 * Persistencia en CSV
  
-*(cualquier otra feature que quieran agregar)

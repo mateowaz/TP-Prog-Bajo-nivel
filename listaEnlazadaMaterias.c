@@ -5,16 +5,28 @@
 
 int main(){
 
-  Nodo *Lista = NULL;
-  Materia m1 = {"Algebra", 10};
-  Lista = agregar(copiar_Materia(m1) ,tipo_Materia, Lista);
-  printf("Materias: \n ");
-  ListarMat(Lista);
+Nodo *Lista = NULL; 
+Materia m1 = {"Algebra", 10};
+Lista = agregar(copiar_Materia(m1) ,tipo_Materia, Lista);
+Materia m2 = {"ED", 25};
+Lista = agregar(copiar_Materia(m2) ,tipo_Materia, Lista);
+Materia m3 = {"Ppp", 30};
+Lista = agregar(copiar_Materia(m3) ,tipo_Materia, Lista);
+printf("Materias: \n ");
+ListarMat(Lista);
 
-  printf("Ingrese materia \n");
-  Lista = DarDeAltaMateria(Lista);
-  printf("Materias: \n ");
-  ListarMat(Lista);
+printf("Ingrese materia \n");
+Lista = DarDeAltaMateria(Lista);
+printf("Materias: \n ");
+ListarMat(Lista);
+
+char nombreBuscado[50]; 
+printf("Ingrese el Nombre de la Materia a buscar: ");
+scanf("%s", nombreBuscado); 
+while (getchar() != '\n'); 
+
+Nodo *encontrado = BuscarMatPorNombre(Lista, nombreBuscado);   
+
   LiberarEspacioLista(Lista); 
   return 0;
 }
@@ -41,15 +53,19 @@ Nodo* agregar(void *dato, tipoDato tipo, Nodo *Head){
    nuevoNodo -> tipo = tipo;
    nuevoNodo -> siguiente = NULL;
   
+  if(nuevoNodo == NULL){
+      return Head;
+  }
+
   //Si el head es null lo pongo como nuevo head
    if (Head == NULL){
-    Head = nuevoNodo;
-  }else{ 
+    return nuevoNodo;
+  }
     //Si no, ir al final y enlazarlo
     Nodo *ultimonodo = ObtenerUltimo(Head);
-    ultimonodo -> siguiente = nuevoNodo;
-
-  }
+    if (ultimonodo != NULL) {
+        ultimonodo -> siguiente = nuevoNodo;
+    }
 
   return Head;
 }
@@ -230,25 +246,48 @@ Nodo* DarDeAltaMateria(Nodo *Head){
   NuevaMateria.cantidadAlumnos = 0;
 
   void *datos = copiar_Materia(NuevaMateria);
+
   if(datos == NULL){
     printf("Error al generar Materia");
     return Head;
   }
-  Head = agregar(datos, tipo_Alumno, Head);
+  Head = agregar(datos, tipo_Materia, Head);
   printf("Materia %s agregada exitosamente!", NuevaMateria.nombre);
   return Head;
 
 }
 
 void ListarMat(Nodo *Head){
-  Nodo *Acutal = Head;
+  Nodo *Actual = Head;
    printf("--- Inicio de la Lista ---\n");
 
-  while (Acutal != NULL){
-    Materia *m = (Materia *)Acutal->dato;
+  while (Actual != NULL){
+    Materia *m = (Materia *)Actual->dato;
     printf("Nombre: %s, Cant. Alumnos: %d \n", m->nombre, m->cantidadAlumnos );
-    Acutal =  Acutal->siguiente;
+    Actual =  Actual->siguiente;
   }
      printf("--- Fin de la Lista ---\n");
 
   }
+
+
+Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado){
+  Nodo *Actual = Head;
+ while (Actual != NULL) {
+  
+        if(Actual->tipo == tipo_Materia){ 
+            Materia *m = (Materia *)Actual->dato;
+          
+            if(strcmp(m->nombre, nombBuscado) == 0){
+               
+                printf("Materia %s encontrado.\n", m->nombre);
+                printf("- Datos de la Materia - \n");
+                printf("Nombre: %s, Alumnos: %d \n", m->nombre, m->cantidadAlumnos);
+                return Actual; // Retorna el nodo encontrado
+            }
+        }
+        Actual = Actual->siguiente; 
+    } 
+    printf("Materia no encontrada \n");
+    return NULL;
+}

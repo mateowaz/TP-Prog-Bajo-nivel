@@ -134,15 +134,19 @@ Nodo* agregar(void *dato, tipoDato tipo, Nodo *Head){
    nuevoNodo -> tipo = tipo;
    nuevoNodo -> siguiente = NULL;
   
+  if(nuevoNodo == NULL){
+      return Head;
+  }
+
   //Si el head es null lo pongo como nuevo head
    if (Head == NULL){
-    Head = nuevoNodo;
-  }else{ 
+    return nuevoNodo;
+  }
     //Si no, ir al final y enlazarlo
     Nodo *ultimonodo = ObtenerUltimo(Head);
-    ultimonodo -> siguiente = nuevoNodo;
-
-  }
+    if (ultimonodo != NULL) {
+        ultimonodo -> siguiente = nuevoNodo;
+    }
 
   return Head;
 }
@@ -350,7 +354,7 @@ Nodo* DarDeAlta(Nodo *Head){
   
   printf("Porfavor ingrese sus datos: \n");
   printf("Nombre: \n");
-  scanf("%29s", NuevoAlumno.nombre);
+  scanf("%s", NuevoAlumno.nombre);
   printf("Edad: \n");
   //scanf siempre necesita la dirección de memoria
   if (scanf("%d", &NuevoAlumno.edad) != 1) {
@@ -497,12 +501,12 @@ Nodo* EliminarEst(Nodo *Head) {
             Alumno *e = (Alumno *)actual->dato;
 
             if (e->Legajo == LegajoBuscado) {
-                // Encontrado → eliminamos el nodo
+                // encontrado eliminamos el nodo
                 if (previo == NULL) {
-                    // Caso: el nodo a eliminar es el primero
+                    //si el nodo a eliminar es el primero
                     Head = actual->siguiente;
                 } else {
-                    // Caso: nodo intermedio o final
+                    // caso de si el nodo es intermedio o final
                     previo->siguiente = actual->siguiente;
                 }
                 
