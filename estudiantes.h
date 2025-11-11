@@ -2,60 +2,62 @@
 #include <stdlib.h>
 #include <string.h>
 #define ESTUDIANTE_H
-#define Max_nombre 30
+#define MAX_NOMBRE 30
 
-typedef enum{
+typedef enum
+{
   tipo_int,
   tipo_string,
   tipo_Alumno,
   tipo_Materia,
-}tipoDato;
+} tipoDato;
 
-typedef struct{
-char nombre[Max_nombre];
-int edad;
-float promedio;
-int Legajo;
-}Alumno;
+typedef struct
+{
+  char nombre[MAX_NOMBRE];
+  int edad;
+  float promedio;
+  int Legajo;
+} Alumno;
 
-typedef struct{ 
-char nombre[Max_nombre];
-int cantidadAlumnos;
-}Materia;
+typedef struct
+{
+  char nombre[MAX_NOMBRE];
+  int cantidadAlumnos;
+} Materia;
 
-typedef struct Nodo {
-    void *dato;
-    tipoDato tipo;
-    struct Nodo *siguiente; 
+typedef struct Nodo
+{
+  void *dato;
+  tipoDato tipo;
+  struct Nodo *siguiente;
 } Nodo;
 
 void MostrarMenu();
 
-//Lista
-Nodo* ObtenerUltimo(Nodo *Head);
-Nodo* agregar(void *dato, tipoDato tipo, Nodo *Head);
+// Lista
+Nodo *ObtenerUltimo(Nodo *Head);
+Nodo *agregar(void *dato, tipoDato tipo, Nodo *Head);
 Nodo *Buscar(void *DatoBuscado, tipoDato TipoBuscado, Nodo *Head);
-Nodo* eliminar(void *DatoBuscado, tipoDato TipoBuscado, Nodo *Head);
+Nodo *eliminar(void *DatoBuscado, tipoDato TipoBuscado, Nodo *Head);
 void ImprimirLista(Nodo *Head);
 int LargoLista(Nodo *Head);
 void LiberarEspacioLista(Nodo *Head);
-void *copiar_int (int valor);
+void *copiar_int(int valor);
 void *copiar_string(const char *str);
 void *copiar_estudiante(Alumno est);
 
-
-//Estudiantes
-Nodo* DarDeAlta(Nodo *Head);
+// Estudiantes
+Nodo *DarDeAlta(Nodo *Head);
 void ListarEst(Nodo *Head);
-Nodo* Modificar(Nodo *Head);
-Nodo* EliminarEst(Nodo *Head);
-Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
+Nodo *Modificar(Nodo *Head);
+Nodo *EliminarEst(Nodo *Head);
+Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
 
-
-//Materias
+// Materias
 void *copiar_Materia(Materia m);
-Nodo* DarDeAltaMateria(Nodo *Head);
+Nodo *DarDeAltaMateria(Nodo *Head);
 void ListarMat(Nodo *Head);
 Nodo* ModificarMat(Nodo *Head);
 Nodo* EliminarMat(Nodo *Head);
