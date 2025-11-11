@@ -60,5 +60,5 @@ void ListarMat(Nodo *Head);
 Nodo* ModificarMat(Nodo *Head);
 Nodo* EliminarMat(Nodo *Head);
 Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
-void AnotarseMateria(Nodo *Head, int LegajoBuscado);
+void AnotarseMateria(Nodo *Head);
 void RendirMateria(Nodo *Head, int LegajoBuscado);
