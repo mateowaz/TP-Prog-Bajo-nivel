@@ -3,6 +3,7 @@
 #include <string.h>
 #define ESTUDIANTE_H
 #define MAX_NOMBRE 30
+#include <stdbool.h>
 
 typedef enum
 {
@@ -24,6 +25,7 @@ typedef struct
 {
   char nombre[MAX_NOMBRE];
   int cantidadAlumnos;
+  bool Aprobada;
 } Materia;
 
 typedef struct Nodo
