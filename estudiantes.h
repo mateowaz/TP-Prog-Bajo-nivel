@@ -3,6 +3,7 @@
 #include <string.h>
 #define ESTUDIANTE_H
 #define MAX_NOMBRE 30
+#include <stdbool.h>
 
 typedef enum
 {
@@ -24,6 +25,7 @@ typedef struct
 {
   char nombre[MAX_NOMBRE];
   int cantidadAlumnos;
+  bool Aprobada;
 } Materia;
 
 typedef struct Nodo
@@ -59,8 +61,8 @@ void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
 void *copiar_Materia(Materia m);
 Nodo *DarDeAltaMateria(Nodo *Head);
 void ListarMat(Nodo *Head);
-Nodo *ModificarMat(Nodo *Head);
-Nodo *EliminarMat(Nodo *Head);
-Nodo *BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
-void AnotarseMateria(Nodo *Head, int LegajoBuscado);
+Nodo* ModificarMat(Nodo *Head);
+Nodo* EliminarMat(Nodo *Head);
+Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
+void AnotarseMateria(Nodo *Head);
 void RendirMateria(Nodo *Head, int LegajoBuscado);

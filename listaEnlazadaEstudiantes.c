@@ -522,7 +522,7 @@ Nodo* EliminarEst(Nodo *Head) {
         previo = actual;
         actual = actual->siguiente;
     }
-
+    
     // Si llegamos aquí, no se encontró el alumno
     printf("No se encontró ningún alumno con el legajo %d.\n", LegajoBuscado);
     return Head;
