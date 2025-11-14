@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_NOMBRE 50
+#define MAX_NOMBRE 30
 
 int main()
 {
@@ -31,10 +31,11 @@ int main()
   char nombreBuscado[50];
   printf("Ingrese el Nombre de la Materia a buscar: ");
   scanf("%s", nombreBuscado);
-  while (getchar() != '\n')
-    ;
+  while (getchar() != '\n');
 
   Nodo *encontrado = BuscarMatPorNombre(Lista, nombreBuscado);
+
+  Nodo *a = EliminarMat(Lista);
 
   LiberarEspacioLista(Lista);
   return 0;
@@ -339,30 +340,43 @@ Nodo *BuscarMatPorNombre(Nodo *Head, char *nombBuscado)
 Nodo *EliminarMat(Nodo *Head)
 {
   char nombEliminar[MAX_NOMBRE];
-
   Nodo *nodoActual = Head;
   Nodo *nodoAnterior = NULL;
 
+  if(Head == NULL){
+    printf("No hay Materias");
+  }
+
   while (nodoActual != NULL)
   {
-    if (nodoActual->tipo == tipo_Materia)
-    {
+    if (nodoActual->tipo == tipo_Materia){
       Materia *m = (Materia *)nodoActual->dato;
 
-      if (strcmp(m->nombre, nombEliminar) == 0)
-      {
+      if (strcmp(m->nombre, nombEliminar) == 0){
         if (nodoAnterior == NULL)
         {
           Head = nodoActual->siguiente;
         }
         nodoActual = nodoActual->siguiente;
       }
-      printf("Materia no encontrada \n");
-      return NULL;
+
+       free(nodoActual->dato); //liberamos Materia
+       free(nodoActual); //liberamos nodo
+      printf("Materia: %s eliminada exitosamente! \n", m->nombre);
+      return Head;
+      
     }
+
+    nodoAnterior = nodoActual;
+    nodoActual = nodoActual->siguiente;
   }
+ 
+
+  printf("Error al eliminar Materia \n");
+  return Head;
 }
 
+/*
 void AnotarseMateria(Nodo *Head)
 {
   Nodo *nodomateria = NULL;
@@ -432,6 +446,8 @@ void AnotarseMateria(Nodo *Head)
          a->nombre, a->Legajo, m->nombre);
   printf("Ahora la materia %s tiene %d alumnos.\n", m->nombre, m->cantidadAlumnos);
 }
+*/
+
 
 Nodo *ModificarMat(Nodo *Head)
 {
@@ -442,12 +458,10 @@ Nodo *ModificarMat(Nodo *Head)
   if (scanf("%49s", nombBuscado) != 1)
   {
     printf("Error al leer el nombre.\n");
-    while (getchar() != '\n')
-      ;
+    while (getchar() != '\n');
     return Head;
   }
-  while (getchar() != '\n')
-    ;
+  while (getchar() != '\n');
 
   Nodo *nodoActual = Head;
 
@@ -461,13 +475,12 @@ Nodo *ModificarMat(Nodo *Head)
       {
         printf("\nIngrese los nuevos datos:\n", m->nombre);
 
-        printf("Nuevo nombre (actual: %s): ", m->nombre);
+        printf("Ingrese Nuevo nombre (actual: %s): ", m->nombre);
         if (scanf("%49s", nuevoNombre) == 1)
         {
           strcpy(m->nombre, nuevoNombre);
         }
-        while (getchar() != '\n')
-          ;
+        while (getchar() != '\n');
 
         do
         {
@@ -476,8 +489,7 @@ Nodo *ModificarMat(Nodo *Head)
           if (scanf("%d", &nuevaCantidad) == 1)
           {
 
-            while (getchar() != '\n')
-              ;
+            while (getchar() != '\n');
 
             if (nuevaCantidad > 0)
             {
@@ -486,15 +498,13 @@ Nodo *ModificarMat(Nodo *Head)
             }
             else
             {
-
               printf("La cantidad de alumnos debe ser mayor a 0.\n");
             }
           }
           else
           {
             printf("Error al leer la cantidad de alumnos.\n");
-            while (getchar() != '\n')
-              ;
+            while (getchar() != '\n');
           }
         } while (1);
 
