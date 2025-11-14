@@ -4,6 +4,7 @@
 #include <string.h>
 #define MAX_NOMBRE 30
 
+
 int main(){
   Nodo *Lista = NULL;
   int opcion = 0;
@@ -15,9 +16,12 @@ int main(){
   Materia m3 = {"Ppp", 30};
   Lista = agregar(copiar_Materia(m3), tipo_Materia, Lista);
   printf("Materias: \n ");
+  Alumno a1 = {"Juan Perez", 20, 8.5, 1001};
+  Lista = agregar(copiar_estudiante(a1), tipo_Alumno, Lista);
 
-  printf("Lista actual:\n");
+  printf("Lista actual Materias:\n");
   ListarMat(Lista);
+  
 
   // printf("Ingrese materia \n");
   // Lista = DarDeAltaMateria(Lista);
@@ -65,6 +69,10 @@ int main(){
         Lista = ModificarMat(Lista);
         break;
         
+        case 6:
+        AnotarseMateria(Lista);
+        break;
+        
         case 0: 
         printf("\nSaliendo del programa. Liberando memoria...\n");
         break;
@@ -89,7 +97,7 @@ void MostrarMenu(){
     printf("3. Buscar Materia por Nombre\n");
     printf("4. Eliminar Materia\n");
     printf("5. Modificar \n");
-    printf("6. \n");
+    printf("6. Anotarse a Materia\n");
     printf("7. \n");
     printf("0. Salir\n");
     printf("Ingrese su opción: ");
@@ -455,77 +463,93 @@ printf("Error al eliminar Materia \n");
   return Head;
 }
 
-/*
-void AnotarseMateria(Nodo *Head)
-{
-  Nodo *nodomateria = NULL;
-  Nodo *nodoalumno = NULL;
-  char NombreMatBuscado[MAX_NOMBRE];
-  char NombreAlumBuscado[MAX_NOMBRE];
 
-  printf("\n--- Inscripción a Materia ---\n");
-  printf("Ingrese Primero el Nombre del Alumno: ");
-  // fgets ayuda a que no hayan errores de lectura
-  if (fgets(NombreAlumBuscado, MAX_NOMBRE, stdin) != NULL)
-  { // satdin indica que la lectura se hará desde el teclado
-    // se obtiene la longitud actual de la cadena
-    size_t lenAl = strlen(NombreAlumBuscado);
-    // con esto vamos a comprobar si la cadena no está vacía y tambien si el último carácter es un salto de línea
-    if (lenAl > 0 && NombreAlumBuscado[lenAl - 1] == '\n')
-    {
-      // se corta el salto de linea al final
-      NombreAlumBuscado[lenAl - 1] = '\0';
+void AnotarseMateria(Nodo *Head) {
+    char nombreMateriaBuscada[MAX_NOMBRE];
+    int legajoBuscado;
+    
+    // Variables para almacenar los nodos encontrados
+    Nodo *nodoAlumnoEncontrado = NULL; 
+    Nodo *nodoMateriaEncontrada = NULL;
+
+    printf("\n--- Inscripción a Materia ---\n");
+    
+    // 1. Obtener Legajo del Alumno
+    printf("Ingrese el Legajo del Alumno a inscribir: ");
+    if (scanf("%d", &legajoBuscado) != 1) {
+        printf("❌ Error al leer el Legajo.\n");
+        // Limpiar buffer después de scanf
+        int c; while ((c = getchar()) != '\n' && c != EOF) {}
+        return;
     }
-  }
-  else
-  {
-    printf("Error en la lectura");
-    return;
-  }
-  // buscamos por el nombre que ingresamos
-  nodoalumno = BuscarPorNombre(Head, NombreAlumBuscado);
-  if (nodoalumno == NULL)
-  {
-    printf("Error al buscar Alumno %s", NombreAlumBuscado);
-    return;
-  }
+    // Limpiar buffer después de scanf
+    int c; while ((c = getchar()) != '\n' && c != EOF) {}
 
-  printf("Alumno %s Encontrado Exitosamente \n", NombreAlumBuscado);
-  printf("Ingrese el Nombre de la Materia: ");
-
-  if (fgets(NombreMatBuscado, MAX_NOMBRE, stdin) != NULL)
-  {
-    size_t lenMat = strlen(NombreMatBuscado);
-    if (lenMat > 0 && NombreMatBuscado[lenMat - 1] == '\n')
-    {
-      NombreMatBuscado[lenMat - 1] = '\0';
+    // 2. Obtener Nombre de la Materia
+    printf("Ingrese el Nombre de la Materia para inscribirse: ");
+    if (fgets(nombreMateriaBuscada, MAX_NOMBRE, stdin) != NULL) {
+        size_t len = strlen(nombreMateriaBuscada);
+        if (len > 0 && nombreMateriaBuscada[len - 1] == '\n') {
+            nombreMateriaBuscada[len - 1] = '\0';
+        }
+    } else {
+        printf("❌ Error de lectura para la materia.\n");
+        return;
     }
-  }
-  else
-  {
-    printf("Error en la lectura");
-    return;
-  }
 
-  nodomateria = BuscarMatPorNombre(Head, NombreMatBuscado);
-  if (nodomateria == NULL)
-  {
-    printf("Error al buscar Materia %s", NombreMatBuscado);
-    return;
-  }
-  printf("Materia %s Encontrado Exitosamente \n", NombreMatBuscado);
+    // 3. BÚSQUEDA INTEGRADA EN LA LISTA
+    Nodo *Actual = Head;
+    while (Actual != NULL) {
+        
+        // Buscar Alumno por Legajo (si aún no se encuentra)
+        if (Actual->tipo == tipo_Alumno && nodoAlumnoEncontrado == NULL) {
+            Alumno *a = (Alumno *)Actual->dato;
+            if (a->Legajo == legajoBuscado) {
+                nodoAlumnoEncontrado = Actual;
+            }
+        }
+        
+        // Buscar Materia por Nombre (si aún no se encuentra)
+        if (Actual->tipo == tipo_Materia && nodoMateriaEncontrada == NULL) {
+            Materia *m = (Materia *)Actual->dato;
+            if (strcmp(m->nombre, nombreMateriaBuscada) == 0) {
+                nodoMateriaEncontrada = Actual;
+            }
+        }
+        
+        // Si ambos fueron encontrados, podemos detener la búsqueda
+        if (nodoAlumnoEncontrado != NULL && nodoMateriaEncontrada != NULL) {
+            break;
+        }
+        
+        Actual = Actual->siguiente;
+    } 
 
-  // inicializamos la materia y alumnos
-  Materia *m = (Materia *)nodomateria->dato;
-  Alumno *a = (Alumno *)nodoalumno->dato;
-  // aumentamos la cantidad de alumnos de la materia
-  m->cantidadAlumnos++;
+    // 4. Verificación de Resultados
+    if (nodoAlumnoEncontrado == NULL) {
+        printf("❌ Alumno con Legajo %d no encontrado.\n", legajoBuscado);
+        return;
+    }
+    if (nodoMateriaEncontrada == NULL) {
+        printf("❌ Materia '%s' no encontrada.\n", nombreMateriaBuscada);
+        return;
+    }
+    
+    // 5. ANOTAR AL ALUMNO (Incrementar el contador)
+    Alumno *a = (Alumno *)nodoAlumnoEncontrado->dato;
+    Materia *m = (Materia *)nodoMateriaEncontrada->dato;
+    
+    // Esta es la acción de "anotarse"
+    m->cantidadAlumnos++; 
 
-  printf("\nAlumno %s (Legajo: %d) inscrito exitosamente a la materia '%s'.\n",
-         a->nombre, a->Legajo, m->nombre);
-  printf("Ahora la materia %s tiene %d alumnos.\n", m->nombre, m->cantidadAlumnos);
+    printf("\n============================================\n");
+    printf("✅ Alumno **%s** (Legajo: %d) inscrito exitosamente a la materia **%s**.\n", 
+           a->nombre, a->Legajo, m->nombre);
+    printf("La materia '%s' ahora tiene **%d** alumnos inscritos.\n", 
+           m->nombre, m->cantidadAlumnos);
+    printf("============================================\n");
 }
-*/
+
 
 
 Nodo *ModificarMat(Nodo *Head)
