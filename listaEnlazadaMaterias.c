@@ -4,10 +4,10 @@
 #include <string.h>
 #define MAX_NOMBRE 30
 
-int main()
-{
-
+int main(){
   Nodo *Lista = NULL;
+  int opcion = 0;
+
   Materia m1 = {"Algebra", 10};
   Lista = agregar(copiar_Materia(m1), tipo_Materia, Lista);
   Materia m2 = {"ED", 25};
@@ -15,6 +15,8 @@ int main()
   Materia m3 = {"Ppp", 30};
   Lista = agregar(copiar_Materia(m3), tipo_Materia, Lista);
   printf("Materias: \n ");
+
+  printf("Lista actual:\n");
   ListarMat(Lista);
 
   // printf("Ingrese materia \n");
@@ -22,23 +24,75 @@ int main()
   // printf("Materias: \n ");
   // ListarMat(Lista);
 
-  // Prueba ModificarMateria
-  printf("\nIngrese materia para Modificar: \n");
-  Lista = ModificarMat(Lista);
-  printf("\nMaterias: \n ");
-  ListarMat(Lista);
+  do{
+    MostrarMenu();
+    if (scanf("%d", &opcion) != 1) {
+            // Limpiar buffer en caso de entrada no numérica
+            while (getchar() != '\n');
+            opcion = -1; // Opción inválida
+        } else {
+            // Limpiar el caracter de nueva línea restante
+            while (getchar() != '\n'); 
+        }
+        switch (opcion)
+        {
 
-  char nombreBuscado[50];
-  printf("Ingrese el Nombre de la Materia a buscar: ");
-  scanf("%s", nombreBuscado);
-  while (getchar() != '\n');
 
-  Nodo *encontrado = BuscarMatPorNombre(Lista, nombreBuscado);
+        case 1:
+        Lista = DarDeAltaMateria(Lista);
+        break;
 
-  Nodo *a = EliminarMat(Lista);
+        case 2: 
+         printf("\nMaterias: \n ");
+         ListarMat(Lista);
+         break;
 
+        case 3:
+        char nombreBuscado[50];
+        printf("Ingrese el Nombre de la Materia a buscar: ");
+        scanf("%s", nombreBuscado);
+        while (getchar() != '\n');
+
+        Nodo *encontrado = BuscarMatPorNombre(Lista, nombreBuscado); 
+        break;
+        
+        case 4:   
+        Lista = EliminarMat(Lista);
+        break;
+
+        case 5:
+        printf("\nIngrese materia para Modificar: \n");
+        Lista = ModificarMat(Lista);
+        break;
+        
+        case 0: 
+        printf("\nSaliendo del programa. Liberando memoria...\n");
+        break;
+
+        default:
+          printf("\nOpción no válida. Intente de nuevo.\n");
+          break;
+        }
+         
+  }
+  while (opcion != 0);
   LiberarEspacioLista(Lista);
   return 0;
+}
+
+void MostrarMenu(){
+    printf("\n=====================================\n");
+    printf("       GESTOR DE MATERIAS       \n");
+    printf("=====================================\n");
+    printf("1. Dar de Alta (Agregar nueva Materia)\n");
+    printf("2. Listar todas las materias\n");
+    printf("3. Buscar Materia por Nombre\n");
+    printf("4. Eliminar Materia\n");
+    printf("5. Modificar \n");
+    printf("6. \n");
+    printf("7. \n");
+    printf("0. Salir\n");
+    printf("Ingrese su opción: ");
 }
 
 Nodo *ObtenerUltimo(Nodo *Head)
@@ -303,10 +357,18 @@ void ListarMat(Nodo *Head)
   Nodo *Actual = Head;
   printf("--- Inicio de la Lista ---\n");
 
+  if (Head == NULL) {
+        printf("La lista de materias está vacía.\n");
+        return;
+    }
+
   while (Actual != NULL)
   {
-    Materia *m = (Materia *)Actual->dato;
+    if(Actual->tipo == tipo_Materia){
+      Materia *m = (Materia *)Actual->dato;
     printf("Nombre: %s, Cant. Alumnos: %d \n", m->nombre, m->cantidadAlumnos);
+    
+    }
     Actual = Actual->siguiente;
   }
   printf("--- Fin de la Lista ---\n");
@@ -337,42 +399,59 @@ Nodo *BuscarMatPorNombre(Nodo *Head, char *nombBuscado)
   return NULL;
 }
 
-Nodo *EliminarMat(Nodo *Head)
-{
+Nodo *EliminarMat(Nodo *Head){
   char nombEliminar[MAX_NOMBRE];
   Nodo *nodoActual = Head;
   Nodo *nodoAnterior = NULL;
 
+  printf("\n-- Eliminación de Materia ---\n");
+
   if(Head == NULL){
     printf("No hay Materias");
+    return Head;
   }
+
+  printf("\nIngrese el Nombre de la Materia a eliminar: ");
+
+  if (scanf("%29s", nombEliminar) != 1) {
+    // Eliminar cualquier carácter restante
+     int c; while ((c = getchar()) != '\n' && c != EOF);
+        printf("Entrada inválida o error de lectura.\n");
+        return Head;
+    }
+    // Limpiar buffer después de scanf
+    int c; while ((c = getchar()) != '\n' && c != EOF);
 
   while (nodoActual != NULL)
   {
     if (nodoActual->tipo == tipo_Materia){
       Materia *m = (Materia *)nodoActual->dato;
 
-      if (strcmp(m->nombre, nombEliminar) == 0){
-        if (nodoAnterior == NULL)
-        {
-          Head = nodoActual->siguiente;
+      if (strcmp(m->nombre, nombEliminar) == 0) {
+          
+                if (nodoAnterior == NULL) {
+                    Head = nodoActual->siguiente;
+                } else {
+                    nodoAnterior->siguiente = nodoActual->siguiente;
+                }
+                
+               
+                char Eliminado[MAX_NOMBRE]; 
+                strcpy(Eliminado, m->nombre); // Guardar el nombre antes de liberar
+
+                free(nodoActual->dato); 
+                free(nodoActual);       
+                
+                printf("Materia '%s' eliminada exitosamente!\n", Eliminado);
+                return Head; 
+            }
         }
+        
+        
+        nodoAnterior = nodoActual;
         nodoActual = nodoActual->siguiente;
-      }
-
-       free(nodoActual->dato); //liberamos Materia
-       free(nodoActual); //liberamos nodo
-      printf("Materia: %s eliminada exitosamente! \n", m->nombre);
-      return Head;
-      
-    }
-
-    nodoAnterior = nodoActual;
-    nodoActual = nodoActual->siguiente;
-  }
- 
-
-  printf("Error al eliminar Materia \n");
+}
+printf("Error al eliminar Materia \n");
   return Head;
 }
 
