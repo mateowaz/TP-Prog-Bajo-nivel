@@ -16,9 +16,15 @@ int main()
   printf("Materias: \n ");
   ListarMat(Lista);
 
-  printf("Ingrese materia \n");
-  Lista = DarDeAltaMateria(Lista);
-  printf("Materias: \n ");
+  // printf("Ingrese materia \n");
+  // Lista = DarDeAltaMateria(Lista);
+  // printf("Materias: \n ");
+  // ListarMat(Lista);
+
+  // Prueba ModificarMateria
+  printf("\nIngrese materia para Modificar: \n");
+  Lista = ModificarMat(Lista);
+  printf("\nMaterias: \n ");
   ListarMat(Lista);
 
   char nombreBuscado[50];
@@ -366,5 +372,82 @@ Nodo *EliminarMat(Nodo *Head)
   }
 
   printf("Materia '\"%s\"' no encontrada.\n", nombEliminar);
+  return Head;
+}
+
+Nodo *ModificarMat(Nodo *Head)
+{
+  char nombBuscado[MAX_NOMBRE];
+  char nuevoNombre[MAX_NOMBRE];
+  int nuevaCantidad;
+
+  // Se asume que el printf para pedir la materia a buscar está en el main.
+  if (scanf("%49s", nombBuscado) != 1)
+  {
+    printf("Error al leer el nombre.\n");
+    while (getchar() != '\n')
+      ;
+    return Head;
+  }
+  while (getchar() != '\n')
+    ;
+
+  Nodo *nodoActual = Head;
+
+  while (nodoActual != NULL)
+  {
+    if (nodoActual->tipo == tipo_Materia)
+    {
+      Materia *m = (Materia *)nodoActual->dato;
+
+      if (strcmp(m->nombre, nombBuscado) == 0)
+      {
+        printf("\nIngrese los nuevos datos:\n", m->nombre);
+
+        printf("Nuevo nombre (actual: %s): ", m->nombre);
+        if (scanf("%49s", nuevoNombre) == 1)
+        {
+          strcpy(m->nombre, nuevoNombre);
+        }
+        while (getchar() != '\n')
+          ;
+
+        do
+        {
+          printf("Nueva cantidad de alumnos (actual: %d): ", m->cantidadAlumnos);
+
+          if (scanf("%d", &nuevaCantidad) == 1)
+          {
+
+            while (getchar() != '\n')
+              ;
+
+            if (nuevaCantidad > 0)
+            {
+              m->cantidadAlumnos = nuevaCantidad;
+              break;
+            }
+            else
+            {
+
+              printf("La cantidad de alumnos debe ser mayor a 0.\n");
+            }
+          }
+          else
+          {
+            printf("Error al leer la cantidad de alumnos.\n");
+            while (getchar() != '\n')
+              ;
+          }
+        } while (1);
+
+        printf("\nSe ha modificado: \"%s\"\n", m->nombre);
+        return Head;
+      }
+    }
+    nodoActual = nodoActual->siguiente;
+  }
+
+  printf("No se pudo modificar.\n", nombBuscado);
   return Head;
 }
