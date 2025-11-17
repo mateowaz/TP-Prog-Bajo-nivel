@@ -13,6 +13,13 @@ typedef enum
   tipo_Materia,
 } tipoDato;
 
+typedef struct Nodo
+{
+  void *dato;
+  tipoDato tipo;
+  struct Nodo *siguiente;
+} Nodo;
+
 typedef struct
 {
   char nombre[MAX_NOMBRE];
@@ -21,19 +28,15 @@ typedef struct
   int Legajo;
 } Alumno;
 
-typedef struct
+typedef struct 
 {
   char nombre[MAX_NOMBRE];
   int cantidadAlumnos;
+  struct Nodo *alumnosInscritos;
   bool Aprobada;
 } Materia;
 
-typedef struct Nodo
-{
-  void *dato;
-  tipoDato tipo;
-  struct Nodo *siguiente;
-} Nodo;
+
 
 void MostrarMenu();
 
@@ -54,7 +57,7 @@ Nodo *DarDeAlta(Nodo *Head);
 void ListarEst(Nodo *Head);
 Nodo *Modificar(Nodo *Head);
 Nodo *EliminarEst(Nodo *Head);
-Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado);
+Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
 
 // Materias

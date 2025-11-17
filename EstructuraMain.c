@@ -4,6 +4,11 @@
 #include <string.h>
 #define MAX_NOMBRE 30
 
+void VerAlumnosDeMat(Nodo *Head); 
+void AnotarseMateria(Nodo *Head);
+Nodo *ObtenerUltimo(Nodo *Head);
+Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
+
 int main(){
   Nodo *Lista = NULL;
   int opcion = 0;
@@ -74,6 +79,10 @@ int main(){
         case 6:
         AnotarseMateria(Lista);
         break;
+
+        case 7:
+        VerAlumnosDeMat(Lista);
+        break;
         
         case 0: 
         printf("\nSaliendo del programa. Liberando memoria...\n");
@@ -100,22 +109,18 @@ void MostrarMenu(){
     printf("4. Eliminar Materia\n");
     printf("5. Modificar \n");
     printf("6. Anotarse a Materia\n");
-    printf("7. \n");
+    printf("7. Ver Alumnos De Materia\n");
     printf("0. Salir\n");
     printf("Ingrese su opción: ");
 }
 
-Nodo *ObtenerUltimo(Nodo *Head)
-{
-
+Nodo *ObtenerUltimo(Nodo *Head){
   Nodo *Indice = Head;
-  if (Indice == NULL)
-  {
+  if (Indice == NULL) {
     return NULL;
   }
   // Mientras el siguiente sea distinto de Null, lo recorro hasta el final
-  while (Indice->siguiente != NULL)
-  {
+  while (Indice->siguiente != NULL){
     Indice = Indice->siguiente;
   }
   return Indice;
@@ -328,15 +333,19 @@ void LiberarEspacioLista(Nodo *Head)
   }
 }
 
-void *copiar_Materia(Materia m)
-{
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////MATERIAS////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void *copiar_Materia(Materia m){
   Materia *nuevaMateria = malloc(sizeof(Materia));
-  if (nuevaMateria == NULL)
-  {
+  if (nuevaMateria == NULL){
     return NULL;
   }
 
-  *nuevaMateria = m;
+  strcpy(nuevaMateria->nombre, m.nombre);
+  nuevaMateria->alumnosInscritos = NULL;
+  nuevaMateria->cantidadAlumnos = 0;
   return (void *)nuevaMateria;
 }
 
@@ -348,7 +357,14 @@ Nodo *DarDeAltaMateria(Nodo *Head)
   //%29s es el limite de caracteres para escribir el nombre de la materia
   scanf("%29s", NuevaMateria.nombre);
 
+  Nodo *MateriaRepetida = BuscarMatPorNombre(Head, NuevaMateria.nombre);
+  if(MateriaRepetida != NULL){
+    printf("Error: Materia %s ya existe", NuevaMateria.nombre);
+    return Head;
+  }
+
   NuevaMateria.cantidadAlumnos = 0;
+  NuevaMateria.alumnosInscritos = NULL;
 
   void *datos = copiar_Materia(NuevaMateria);
 
@@ -384,29 +400,20 @@ void ListarMat(Nodo *Head)
   printf("--- Fin de la Lista ---\n");
 }
 
-Nodo *BuscarMatPorNombre(Nodo *Head, char *nombBuscado)
-{
-  Nodo *Actual = Head;
-  while (Actual != NULL)
-  {
-
-    if (Actual->tipo == tipo_Materia)
-    {
-      Materia *m = (Materia *)Actual->dato;
-
-      if (strcmp(m->nombre, nombBuscado) == 0)
-      {
-
-        printf("Materia %s encontrado.\n", m->nombre);
-        printf("- Datos de la Materia - \n");
-        printf("Nombre: %s, Alumnos: %d \n", m->nombre, m->cantidadAlumnos);
-        return Actual; // Retorna el nodo encontrado
-      }
+Nodo *BuscarMatPorNombre(Nodo *Head, char *nombBuscado) {
+    Nodo *Actual = Head;
+    
+    while (Actual != NULL) { 
+        if (Actual->tipo == tipo_Materia) {
+            Materia *m = (Materia *)Actual->dato;
+            if (strcmp(m->nombre, nombBuscado) == 0) {
+                return Actual; // retorna el nodo encontrado
+            }
+        }
+        Actual = Actual->siguiente; 
     }
-    Actual = Actual->siguiente;
-  }
-  printf("Materia no encontrada \n");
-  return NULL;
+    printf("Materia no encontrada\n"); 
+    return NULL;
 }
 
 Nodo *EliminarMat(Nodo *Head){
@@ -470,24 +477,24 @@ void AnotarseMateria(Nodo *Head) {
     char nombreMateriaBuscada[MAX_NOMBRE];
     int legajoBuscado;
     
-    // Variables para almacenar los nodos encontrados
     Nodo *nodoAlumnoEncontrado = NULL; 
     Nodo *nodoMateriaEncontrada = NULL;
 
     printf("\n--- Inscripción a Materia ---\n");
     
-    // 1. Obtener Legajo del Alumno
+    //obtener legajo del alumno
     printf("Ingrese el Legajo del Alumno a inscribir: ");
     if (scanf("%d", &legajoBuscado) != 1) {
-        printf("❌ Error al leer el Legajo.\n");
-        // Limpiar buffer después de scanf
+        printf("Error al leer el Legajo.\n");
+        // limpiar buffer después de scanf
         int c; while ((c = getchar()) != '\n' && c != EOF) {}
         return;
     }
-    // Limpiar buffer después de scanf
-    int c; while ((c = getchar()) != '\n' && c != EOF) {}
+    // limpiar buffer después de scanf
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
 
-    // 2. Obtener Nombre de la Materia
+    // obtener Nombre de la Materia
     printf("Ingrese el Nombre de la Materia para inscribirse: ");
     if (fgets(nombreMateriaBuscada, MAX_NOMBRE, stdin) != NULL) {
         size_t len = strlen(nombreMateriaBuscada);
@@ -495,15 +502,14 @@ void AnotarseMateria(Nodo *Head) {
             nombreMateriaBuscada[len - 1] = '\0';
         }
     } else {
-        printf("❌ Error de lectura para la materia.\n");
+        printf("Error para encontrar la materia.\n");
         return;
     }
 
-    // 3. BÚSQUEDA INTEGRADA EN LA LISTA
     Nodo *Actual = Head;
     while (Actual != NULL) {
         
-        // Buscar Alumno por Legajo (si aún no se encuentra)
+        // buscar Alumno por Legajo (si aun no se encuentra)
         if (Actual->tipo == tipo_Alumno && nodoAlumnoEncontrado == NULL) {
             Alumno *a = (Alumno *)Actual->dato;
             if (a->Legajo == legajoBuscado) {
@@ -511,7 +517,7 @@ void AnotarseMateria(Nodo *Head) {
             }
         }
         
-        // Buscar Materia por Nombre (si aún no se encuentra)
+        // buscar Materia por Nombre 
         if (Actual->tipo == tipo_Materia && nodoMateriaEncontrada == NULL) {
             Materia *m = (Materia *)Actual->dato;
             if (strcmp(m->nombre, nombreMateriaBuscada) == 0) {
@@ -519,7 +525,7 @@ void AnotarseMateria(Nodo *Head) {
             }
         }
         
-        // Si ambos fueron encontrados, podemos detener la búsqueda
+        // si ambos fueron encontrados, podemos detener la busqueda
         if (nodoAlumnoEncontrado != NULL && nodoMateriaEncontrada != NULL) {
             break;
         }
@@ -527,25 +533,37 @@ void AnotarseMateria(Nodo *Head) {
         Actual = Actual->siguiente;
     } 
 
-    // 4. Verificación de Resultados
+    //verificación de Resultados
     if (nodoAlumnoEncontrado == NULL) {
-        printf("❌ Alumno con Legajo %d no encontrado.\n", legajoBuscado);
+        printf("Alumno con Legajo %d no encontrado.\n", legajoBuscado);
         return;
     }
     if (nodoMateriaEncontrada == NULL) {
-        printf("❌ Materia '%s' no encontrada.\n", nombreMateriaBuscada);
+        printf("Materia '%s' no encontrada.\n", nombreMateriaBuscada);
         return;
     }
     
-    // 5. ANOTAR AL ALUMNO (Incrementar el contador)
+    
     Alumno *a = (Alumno *)nodoAlumnoEncontrado->dato;
     Materia *m = (Materia *)nodoMateriaEncontrada->dato;
+    //verificamos que ya esten
+    Nodo *alumnoYaInscrito = BuscarPorLegajo(m->alumnosInscritos, a->Legajo);
     
-    // Esta es la acción de "anotarse"
+    if (alumnoYaInscrito != NULL) {
+        printf("\n ERROR: El alumno **%s** (Legajo: %d) ya está inscrito en la materia **%s**.\n", 
+               a->nombre, a->Legajo, m->nombre);
+        return; 
+    }
+
+    //crea una copia de los datos del alumno 
+    void *copia_alumno = copiar_estudiante(*a);
+    //lo agrega 
+    m->alumnosInscritos = agregar(copia_alumno, tipo_Alumno, m->alumnosInscritos);
+    // esta es la acción de "anotarse"
     m->cantidadAlumnos++; 
 
     printf("\n============================================\n");
-    printf("✅ Alumno **%s** (Legajo: %d) inscrito exitosamente a la materia **%s**.\n", 
+    printf("Alumno **%s** (Legajo: %d) inscrito exitosamente a la materia **%s**.\n", 
            a->nombre, a->Legajo, m->nombre);
     printf("La materia '%s' ahora tiene **%d** alumnos inscritos.\n", 
            m->nombre, m->cantidadAlumnos);
@@ -624,7 +642,67 @@ Nodo *ModificarMat(Nodo *Head)
   return Head;
 }
 
+void VerAlumnosDeMat(Nodo *Head){
+  Nodo *Actual = Head;  
+  char MatBuscado[MAX_NOMBRE];
+  Nodo *nodoMateriaEncontrada = NULL;
+  
+  
+  if(Head == NULL){
+    printf("Lista vacia");
+    return;
+  }
 
+   printf("Ingrese el Nombre de la Materia para ver los Alumnos: ");
+    if (fgets(MatBuscado, MAX_NOMBRE, stdin) != NULL) {
+        size_t len = strlen(MatBuscado);
+        if (len > 0 && MatBuscado[len - 1] == '\n') {
+           MatBuscado[len - 1] = '\0';
+        }
+    } else {
+        printf("Error para encontrar la materia.\n");
+        return;
+    }
+
+  while(Actual != NULL){
+    if(Actual->tipo == tipo_Materia){
+      Materia *m = (Materia *)Actual->dato;
+            if (strcmp(m->nombre, MatBuscado) == 0) {
+                nodoMateriaEncontrada = Actual;
+                break; //encontrada 
+            }
+        }
+      Actual = Actual->siguiente;
+
+    }
+    if (nodoMateriaEncontrada == NULL) {
+        printf("Materia '%s' no encontrada.\n", MatBuscado);
+        return;
+    }
+    Materia *m = (Materia *)nodoMateriaEncontrada->dato;
+
+    printf("\n------------------------------------------\n");
+    printf("Alumnos Inscritos en la Materia: **%s**\n", m->nombre);
+    printf("Total de alumnos: %d\n", m->cantidadAlumnos);
+    printf("--------------------------------------------\n");
+  
+    if (m->alumnosInscritos != NULL) {
+        
+        ListarEst(m->alumnosInscritos); 
+    } else {
+        printf("No hay alumnos inscritos en esta materia.\n");
+    }
+    printf("============================================\n");
+    
+}
+    
+  
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////ESTUDIANTES////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void *copiar_estudiante(Alumno est){
   Alumno *nuevoAlumno = malloc(sizeof(Alumno));
@@ -736,25 +814,24 @@ Nodo* Modificar(Nodo *Head){
 }
 
 
-Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
+Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc) {
     Nodo *indice = Head;
-    printf("Ingrese el Nombre del Alumno: ");
-    while (indice != NULL){
-        if(indice->tipo == tipo_Alumno){
+    
+    while (indice != NULL) {
+        if (indice->tipo == tipo_Alumno) { 
             Alumno *alum = (Alumno *)indice->dato;
 
-        if (strcmp(alum->nombre, nombBuscado) == 0){
-            printf("Alumno %s encontrado.\n", alum->nombre);
-            printf("- Datos de Alumno - \n");
-            printf("Nombre: %s, Edad: %d, Promedio: %f, Legajo: %d ", alum->nombre, alum->edad, alum->promedio, alum->Legajo);
-           return indice; 
+            if (alum->Legajo == LegajoBusc) {
+        
+                return indice; 
+            }
         }
+        indice = indice->siguiente;
     }
-    indice = indice->siguiente;
+
+    return NULL;
 }
-printf("Alumno no encontrado");
-return NULL;
-}
+
 
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad) {
     
