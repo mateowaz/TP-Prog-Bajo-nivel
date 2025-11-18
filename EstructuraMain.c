@@ -9,49 +9,127 @@ void VerAlumnosDeMat(Nodo *Head);
 void AnotarseMateria(Nodo *Head);
 Nodo *ObtenerUltimo(Nodo *Head);
 Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
+Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
 
 int main(){
   Nodo *Lista = NULL;
-  int opcion = 0;
+  int opcionPrincipal = 0;
+  int opcionSubmenu = 0;
+  int c;
   srand(time(NULL));
   
+  printf("Cargando datos de prueba...\n");
+    Lista = CargarDatosIniciales(Lista);
 
-  Materia m1 = {"Algebra", 10};
-  Lista = agregar(copiar_Materia(m1), tipo_Materia, Lista);
-  Materia m2 = {"ED", 25};
-  Lista = agregar(copiar_Materia(m2), tipo_Materia, Lista);
-  Materia m3 = {"Ppp", 30};
-  Lista = agregar(copiar_Materia(m3), tipo_Materia, Lista);
-  printf("Lista actual Materias:\n");
-  ListarMat(Lista);
-
-
-  Alumno a1 = {"Juan Perez", 20, 8.5, 100};
-  Lista = agregar(copiar_estudiante(a1), tipo_Alumno, Lista);
-
-  printf("Lista actual Alumnos:\n");
-  ListarEst(Lista);
-  
-
-  // printf("Ingrese materia \n");
-  // Lista = DarDeAltaMateria(Lista);
-  // printf("Materias: \n ");
-  // ListarMat(Lista);
 
   do{
-    MostrarMenuMaterias();
-    if (scanf("%d", &opcion) != 1) {
+    MostrarMenu();
+    if (scanf("%d", &opcionPrincipal) != 1) {
+            opcionPrincipal = -1; // Inválida
+        }
+        while ((c = getchar()) != '\n' && c != EOF); 
+
+        switch (opcionPrincipal) {
+
+          case 1:
+          do{
+            MostrarMenuEstudiantes();
+            if (scanf("%d", &opcionSubmenu) != 1) {
             // Limpiar buffer en caso de entrada no numérica
             while (getchar() != '\n');
-            opcion = -1; // Opción inválida
+            opcionSubmenu = -1; // Opción inválida
         } else {
             // Limpiar el caracter de nueva línea restante
             while (getchar() != '\n'); 
         }
-        switch (opcion)
+        switch (opcionSubmenu){
+          case 1:
+            Lista = DarDeAlta(Lista);
+            break;
+        case 2: 
+            Lista = Modificar(Lista);
+            break;
+        case 3:
+            ListarEst(Lista);
+            break;
+        case 4:
+            LargoLista(Lista);
+            break;
+
+        case 5: 
+            char nombreBuscado[50]; //Maximo de la entrada
+
+            printf("Ingrese el Nombre del Alumno a buscar: ");
+            scanf("%s", nombreBuscado); // Lee el nombre ingresado por el usuario
+            while (getchar() != '\n'); // Limpiar el buffer
+
+            //llamada a la funcion
+            Nodo *encontrado = BuscarPorNombre(Lista, nombreBuscado);
+
+            // Manejar el resultado de la búsqueda si es necesario
+            if (encontrado != NULL) {
+            // Ya se imprimió la información en BuscarPorNombre
+                        }
+            break;
+        
+        case 6:
+          int minEdad;
+          int maxEdad;
+          printf("Ingrese el rango de edad de los Alumnos a buscar: \n");
+          printf("Ingrese el rango minimo: \n");
+          if (scanf("%d", &maxEdad) != 1) {
+          while (getchar() != '\n');
+            printf("Entrada minima invalida.\n");
+            break;
+            }
+          while (getchar() != '\n');
+          printf("Ingrese el rango maximo: \n");
+          if (scanf("%d", &maxEdad) != 1) {
+          while (getchar() != '\n');
+            printf("Entrada máxima invalida.\n");
+            break;
+            }
+            while (getchar() != '\n');
+          if (minEdad > maxEdad) {
+            printf("El rango mínimo no puede ser mayor que el máximo.\n");
+         break;
+    }
+            
+         BuscarPorEdad(Lista, minEdad, maxEdad);
+         break; 
+         
+        case 7:
+           Lista = EliminarEst(Lista);             
+        break;
+                
+        case 0:
+            printf("\nVolviendo al Menú Principal...\n");
+            break;
+        
+        default:
+            printf("\nOpción no válida. Intente de nuevo.\n");
+            break;
+
+        }
+
+          }while (opcionSubmenu != 0);
+                opcionSubmenu = 0; //reiniciar la opción del submenú
+                break;
+
+          case 2:
+          do{
+            MostrarMenuMaterias();
+            
+        if (scanf("%d", &opcionSubmenu) != 1) {
+            // Limpiar buffer en caso de entrada no numérica
+            while (getchar() != '\n');
+            opcionSubmenu = -1; // Opción inválida
+        } else {
+            // Limpiar el caracter de nueva línea restante
+            while (getchar() != '\n'); 
+        }
+        switch (opcionSubmenu)
         {
-
-
         case 1:
         Lista = DarDeAltaMateria(Lista);
         break;
@@ -92,16 +170,21 @@ int main(){
         break;
         
         case 0: 
-        printf("\nSaliendo del programa. Liberando memoria...\n");
-        break;
+            printf("\nVolviendo al Menú Principal...\n");
+            break;
 
         default:
-          printf("\nOpción no válida. Intente de nuevo.\n");
-          break;
-        }
-         
-  }
-  while (opcion != 0);
+                printf("\nOpción no válida. Intente de nuevo.\n");
+                break;
+        } 
+    
+    } while (opcionSubmenu != 0);
+    opcionSubmenu = 0;
+    break;
+
+}
+}while (opcionPrincipal != 0);
+  printf("Saliendo, Liberando memoria...\n");
   LiberarEspacioLista(Lista);
   return 0;
 }
@@ -145,6 +228,61 @@ void MostrarMenuEstudiantes(){
     printf("7. Eliminar Alumno\n");
     printf("0. Salir\n");
     printf("Ingrese su opción: ");
+}
+
+Nodo* CargarDatosIniciales(Nodo *Head) {
+    const char *nombres_base[] = {"Algebra", "Fisica", "Quimica", "Historia", "Literatura", "Algoritmos", "Redes", "BaseDeDatos", "Ingles", "Taller", "Calculo", "Probabilidad", "Sistemas", "Arquitectura", "IA", "Prog Bajo Nivel", "Diseño Logico", "Arquitectura"};
+    const char *apellidos_alumnos[] = {"Gomez", "Lopez", "Perez", "Rodriguez", "Sanchez", "Martinez", "Fernandez", "Garcia", "Silva", "Nuñez" };
+    const char *nombres_alumnos[] = {"Ana", "Luis", "Carlos", "Sofia", "Diego", "Maria", "Elena", "Pedro", "Julio", "Laura", "Mateo", "Valentina", "Elias", "Brenda", "Simon", "Mateo", "Fede"};
+    
+    int i;
+    int legajoActual = 100; //Legajos desde 100
+    
+    //generacion de materias
+    printf("\n--- Generando 20 Materias ---\n");
+    for (i = 0; i < 20; i++) {
+        Materia m;
+        //creamos un nombre único 
+        snprintf(m.nombre, MAX_NOMBRE, "%s %s", nombres_base[i % 15], (i < 5) ? "I" : (i < 10) ? "II" : "III");
+        
+        // asignamos una correlativa simple 
+        if (i > 0) {
+            // asigna la materia anterior como prerrequisito
+            snprintf(m.correlativa_requerida, MAX_NOMBRE, "%s", nombres_base[(i - 1) % 15]);
+        } else {
+            m.correlativa_requerida[0] = '\0'; // No tiene correlativa
+        }
+
+        m.cantidadAlumnos = 0; 
+        m.alumnosInscritos = NULL; // inicializamos la lista interna de cada materia hehca
+        
+        Head = agregar(copiar_Materia(m), tipo_Materia, Head);
+    }
+    
+  
+    printf("\n--- Generando 25 Alumnos ---\n");
+    for (i = 0; i < 25; i++) {
+        Alumno a;
+        
+        // generamos un nombre completo aleatorio
+        const char *nombre_pila = nombres_alumnos[rand() % (sizeof(nombres_alumnos) / sizeof(nombres_alumnos[0]))];
+        const char *apellido = apellidos_alumnos[rand() % (sizeof(apellidos_alumnos) / sizeof(apellidos_alumnos[0]))];
+        
+        snprintf(a.nombre, MAX_NOMBRE, "%s %s", nombre_pila, apellido);
+        
+        a.edad = 18 + (rand() % 5); 
+        a.promedio = 6.00 + (float)(rand() % 400) / 100.0; // promedio entre 6.00 y 9.99
+        a.Legajo = legajoActual++; // legajo único
+        
+        a.TotalNotas = 0; 
+        a.cantMaterias = 0;
+        a.historialRendidas = NULL;
+
+        Head = agregar(copiar_estudiante(a), tipo_Alumno, Head);
+    }
+    
+    printf("\n--- Carga Automática de Datos Finalizada ---\n");
+    return Head;
 }
 
 Nodo *ObtenerUltimo(Nodo *Head){
@@ -408,9 +546,9 @@ Nodo *DarDeAltaMateria(Nodo *Head)
   return Head;
 }
 
-void ListarMat(Nodo *Head)
-{
+void ListarMat(Nodo *Head){
   Nodo *Actual = Head;
+  int cantMat = 0;
   printf("--- Inicio de la Lista ---\n");
 
   if (Head == NULL) {
@@ -418,15 +556,16 @@ void ListarMat(Nodo *Head)
         return;
     }
 
-  while (Actual != NULL)
-  {
+  while (Actual != NULL){
     if(Actual->tipo == tipo_Materia){
       Materia *m = (Materia *)Actual->dato;
+      cantMat++;
     printf("Nombre: %s, Cant. Alumnos: %d \n", m->nombre, m->cantidadAlumnos);
-    
     }
     Actual = Actual->siguiente;
+    
   }
+  printf("Cantidad De Materias: %d\n", cantMat);
   printf("--- Fin de la Lista ---\n");
 }
 
@@ -851,37 +990,64 @@ void *copiar_estudiante(Alumno est){
 //Da la lista con todos los estudiantes, separado por comas
 void ListarEst(Nodo *Head){
     Nodo *Indice = Head;
+    int cantEst = 0;
     printf("--- Inicio de la Lista ---\n");
    
     while(Indice != NULL){
         //obtenemos los datos de todos los alumnos
         if(Indice->tipo == tipo_Alumno){
-           Alumno *e = (Alumno *)Indice->dato;   
+           Alumno *e = (Alumno *)Indice->dato;
+           cantEst++;   
         printf("Nombre: %s, Edad: %d, Promedio: %.2f, Legajo: %d\n", 
                e->nombre, e->edad, e->promedio, e->Legajo); 
           
         }
          Indice = Indice->siguiente;
     }
-    
+    printf("Cantidad de Alumnos: %d\n", cantEst);
     printf("--- Fin de la Lista ---\n");
 }
 
 //damos de alta a un alumno asignandole sus valores
 Nodo* DarDeAlta(Nodo *Head){
   Alumno NuevoAlumno;
+  Nodo *alumnoDuplicado = NULL;
+  int c;
+  int EdadValida;
   
   printf("Porfavor ingrese sus datos: \n");
-  printf("Nombre: \n");
+  printf("Nombre: ");
   scanf("%s", NuevoAlumno.nombre);
-  printf("Edad: \n");
+
+  do{
+    EdadValida = 1;
+    printf("Edad: ");
   //scanf siempre necesita la dirección de memoria
   if (scanf("%d", &NuevoAlumno.edad) != 1) {
     printf("Edad inválida.\n");
     while (getchar() != '\n');
+    EdadValida = 0;
             };
-  printf("Legajo: \n");
+  if(NuevoAlumno.edad < 18 || NuevoAlumno.edad>100){
+    printf("Edad No correspondida para Rendir\n");
+    EdadValida = 0;
+  }
+  }while (EdadValida == 0);
+  
+
+  do {
+  printf("Legajo: ");
   scanf("%d", &NuevoAlumno.Legajo);
+  alumnoDuplicado = (Nodo*)1;
+  continue;
+  }while ((c = getchar()) != '\n' && c != EOF); 
+
+  alumnoDuplicado = BuscarPorLegajo(Head, NuevoAlumno.Legajo);
+  if(alumnoDuplicado != NULL){
+    printf("Este Legajo ya exite, intente otro");
+  }while (alumnoDuplicado != NULL);
+
+  NuevoAlumno.promedio = 0.0;
 
   void *DatosCopiados = copiar_estudiante(NuevoAlumno);
   if(DatosCopiados == NULL){
@@ -893,7 +1059,6 @@ Nodo* DarDeAlta(Nodo *Head){
   printf("Estudiante %s (%d) Agregado Exitosamente \n", NuevoAlumno.nombre, NuevoAlumno.Legajo);
 
   return Head;
-
 }
 
 //Buscamos un alumno por legajo y lo modificamos
@@ -1046,3 +1211,22 @@ Nodo* EliminarEst(Nodo *Head) {
     return Head;
 }
 
+Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
+    Nodo *indice = Head;
+    printf("Ingrese el Nombre del Alumno: ");
+    while (indice != NULL){
+        if(indice->tipo == tipo_Alumno){
+            Alumno *alum = (Alumno *)indice->dato;
+
+        if (strcmp(alum->nombre, nombBuscado) == 0){
+            printf("Alumno %s encontrado.\n", alum->nombre);
+            printf("- Datos de Alumno - \n");
+            printf("Nombre: %s, Edad: %d, Promedio: %f, Legajo: %d ", alum->nombre, alum->edad, alum->promedio, alum->Legajo);
+           return indice; 
+        }
+    }
+    indice = indice->siguiente;
+}
+printf("Alumno no encontrado");
+return NULL;
+}

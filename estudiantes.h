@@ -28,6 +28,7 @@ typedef struct
   int Legajo;
   int cantMaterias;
   int TotalNotas;
+  struct Nodo *historialRendidas;
 } Alumno;
 
 typedef struct 
@@ -35,7 +36,7 @@ typedef struct
   char nombre[MAX_NOMBRE];
   int cantidadAlumnos;
   struct Nodo *alumnosInscritos;
-  bool Aprobada;
+  char correlativa_requerida[MAX_NOMBRE];
 } Materia;
 
 void MostrarMenu();
@@ -53,6 +54,7 @@ void LiberarEspacioLista(Nodo *Head);
 void *copiar_int(int valor);
 void *copiar_string(const char *str);
 void *copiar_estudiante(Alumno est);
+Nodo* CargarDatosIniciales(Nodo *Head);
 
 // Estudiantes
 Nodo *DarDeAlta(Nodo *Head);
@@ -60,6 +62,7 @@ void ListarEst(Nodo *Head);
 Nodo *Modificar(Nodo *Head);
 Nodo *EliminarEst(Nodo *Head);
 Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
+Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
 
 // Materias
