@@ -26,6 +26,8 @@ typedef struct
   int edad;
   float promedio;
   int Legajo;
+  int cantMaterias;
+  int TotalNotas;
 } Alumno;
 
 typedef struct 
@@ -36,9 +38,9 @@ typedef struct
   bool Aprobada;
 } Materia;
 
-
-
 void MostrarMenu();
+void MostrarMenuMaterias();
+void MostrarMenuEstudiantes();
 
 // Lista
 Nodo *ObtenerUltimo(Nodo *Head);
@@ -68,4 +70,5 @@ Nodo* ModificarMat(Nodo *Head);
 Nodo* EliminarMat(Nodo *Head);
 Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
 void AnotarseMateria(Nodo *Head);
-void RendirMateria(Nodo *Head, int LegajoBuscado);
+void RendirMateria(Nodo *Head);
+
