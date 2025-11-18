@@ -11,6 +11,7 @@ typedef enum
   tipo_string,
   tipo_Alumno,
   tipo_Materia,
+  tipo_Resultado,
 } tipoDato;
 
 typedef struct Nodo
@@ -39,6 +40,12 @@ typedef struct
   char correlativa_requerida[MAX_NOMBRE];
 } Materia;
 
+typedef struct {
+    char nombreMateria[MAX_NOMBRE]; 
+    int nota;                       
+    int aprobada;                   
+} ResultadoMateria;
+
 void MostrarMenu();
 void MostrarMenuMaterias();
 void MostrarMenuEstudiantes();
@@ -64,14 +71,18 @@ Nodo *EliminarEst(Nodo *Head);
 Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
 Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
 void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad);
+Nodo *EliminarPorLegajoDeMateria(Nodo *Head, int LegajoBus);
 
 // Materias
 void *copiar_Materia(Materia m);
+void *copiar_resultado(ResultadoMateria res);
 Nodo *DarDeAltaMateria(Nodo *Head);
 void ListarMat(Nodo *Head);
 Nodo* ModificarMat(Nodo *Head);
 Nodo* EliminarMat(Nodo *Head);
 Nodo* BuscarMatPorNombre(Nodo *Head, char *nombBuscado);
 void AnotarseMateria(Nodo *Head);
+Nodo *agregarResultadoMateria(Nodo *Head, ResultadoMateria res);
 void RendirMateria(Nodo *Head);
+
 

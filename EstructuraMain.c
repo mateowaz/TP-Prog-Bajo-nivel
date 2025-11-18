@@ -5,6 +5,7 @@
 #include <time.h>
 #define MAX_NOMBRE 30
 
+
 void VerAlumnosDeMat(Nodo *Head); 
 void AnotarseMateria(Nodo *Head);
 Nodo *ObtenerUltimo(Nodo *Head);
@@ -517,6 +518,18 @@ void *copiar_Materia(Materia m){
   return (void *)nuevaMateria;
 }
 
+void *copiar_resultado(ResultadoMateria res) {
+    //guardamos la memoria del resultado
+    ResultadoMateria *nuevaCopia = (ResultadoMateria *)malloc(sizeof(ResultadoMateria));
+    //chequeo de error
+    if (nuevaCopia == NULL) {
+        return NULL; 
+    }
+    //creamos la copia
+    *nuevaCopia = res; 
+    return (void *)nuevaCopia;
+}
+
 Nodo *DarDeAltaMateria(Nodo *Head)
 {
   Materia NuevaMateria;
@@ -865,6 +878,30 @@ void VerAlumnosDeMat(Nodo *Head){
     
 }
 
+Nodo *agregarResultadoMateria(Nodo *Head, ResultadoMateria res){
+  //copiamos los datos del resultado
+  void *datos = copiar_resultado(res);
+  if(datos == NULL){
+    printf("Error al copiar datos");
+    return Head;
+  }
+  //asignamos el nodo para realizar las operaciones
+  Nodo *N = (Nodo *)malloc(sizeof(N));
+
+  //si falla la asignacion liberamos los datos
+  if(N == NULL){
+    free(datos);
+    return Head;
+  }
+
+  //asignamos los datos al nodo y lo insertamos en el Head
+  N->dato = datos;
+  N->tipo = tipo_Resultado;
+  N->siguiente = Head;
+
+  return N;
+}
+
 void RendirMateria(Nodo *Head){
   char NombreBuscado[MAX_NOMBRE];
   int LegajoBuscado;
@@ -944,11 +981,30 @@ void RendirMateria(Nodo *Head){
     }
     //generar nota random 
     int nota = (rand() % 10) + 1;
+    //si aprueba verificamos que no pueda seguir rindiendola
+    int aprobado;
+    if(nota < 4){
+      aprobado = 0;
+    }else{
+      aprobado = 1;
+    }
+
 
     a->cantMaterias++;
     a->TotalNotas+=nota;
     //calculamos el promedio
     a->promedio = (float)a->TotalNotas / a->cantMaterias;
+
+    //Guardamos el resultado
+    ResultadoMateria nuevoResultado;
+    strcpy(nuevoResultado.nombreMateria, m->nombre);
+    nuevoResultado.nota = nota;
+    nuevoResultado.aprobada = aprobado;
+    a->historialRendidas = agregarResultadoMateria(a->historialRendidas, nuevoResultado);
+
+    //Lo sacamos de la materia ya que la rindio
+    m->alumnosInscritos = EliminarPorLegajoDeMateria(m->alumnosInscritos, a->Legajo);
+    m->cantidadAlumnos--;
 
     printf("\n============================================\n");
     printf("Alumno: %s (Legajo: %d)\n", a->nombre, a->Legajo);
@@ -956,9 +1012,9 @@ void RendirMateria(Nodo *Head){
     printf("--------------------------------------------\n");
     printf("Nota Sacada: %d\n", nota);
     if(nota<4){
-      printf("Desaprobaste!");
+      printf("Desaprobaste! Aprueba otra Materia antes de volver a Anotarte!\n");
     }else{
-      printf("Aprobaste la Cursada!");
+      printf("Aprobaste la Cursada! Ya puedes seguir con las demas Materias!\n");
     }
     printf("--------------------------------------------\n");
     printf("Nuevo Promedio De Alumno: %.2f\n", a->promedio);
@@ -968,7 +1024,8 @@ void RendirMateria(Nodo *Head){
     printf("\n============================================\n");
 
 }
-    
+
+
   
 
 
@@ -1229,4 +1286,30 @@ Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado){
 }
 printf("Alumno no encontrado");
 return NULL;
+}
+
+Nodo *EliminarPorLegajoDeMateria(Nodo *Head, int LegajoBus){
+  Nodo *actual = Head;
+  Nodo *previo = NULL;
+
+  while(actual != NULL){
+    if(actual->tipo == tipo_Alumno){
+      Alumno *a = (Alumno*)actual->dato;
+      if(a->Legajo == LegajoBus){
+        //si es el Head solo
+        if(previo == NULL){
+          Head = actual->siguiente;
+        }else{
+          previo->siguiente = actual->siguiente;
+        }
+
+        free(actual->dato);
+        free(actual);
+        return Head;
+      }
+    }
+    previo = actual;
+    actual = actual->siguiente;
+  }
+  return Head;
 }
