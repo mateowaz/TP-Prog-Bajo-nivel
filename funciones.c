@@ -864,7 +864,7 @@ void RendirMateria(Nodo *Head){
     printf("--------------------------------------------\n");
     printf("Nota Sacada: %d\n", nota);
     if(nota<4){
-      printf("Desaprobaste! Aprueba otra Materia antes de volver a Anotarte!\n");
+      printf("Desaprobaste!\n");
     }else{
       printf("Aprobaste la Cursada! Ya puedes seguir con las demas Materias!\n");
     }
@@ -887,7 +887,12 @@ void RendirMateria(Nodo *Head){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void *copiar_estudiante(Alumno est){
+    if (est.edad < 18 || est.edad > 100) {
+        return NULL; 
+    }
+
   Alumno *nuevoAlumno = malloc(sizeof(Alumno));
+
   if(nuevoAlumno == NULL){
     return NULL;
   }
@@ -937,7 +942,7 @@ Nodo* DarDeAlta(Nodo *Head){
     while (getchar() != '\n');
     EdadValida = 0;
             };
-  if(NuevoAlumno.edad < 18 || NuevoAlumno.edad>100){
+  if(NuevoAlumno.edad < 18 || NuevoAlumno.edad > 100){
     printf("Edad No correspondida para Rendir\n");
     EdadValida = 0;
   }
@@ -1008,7 +1013,7 @@ Nodo* Modificar(Nodo *Head){
                 while (getchar() != '\n');
             }
 
-            printf("\nDatos modificados con éxito.\n");
+            printf("\nDatos modificados con exito.\n");
             printf("Nuevo nombre: %s\n", alum->nombre);
             printf("Nueva edad: %d\n", alum->edad);
             return Head;
@@ -1082,7 +1087,7 @@ Nodo* EliminarEst(Nodo *Head) {
     if (scanf("%d", &LegajoBuscado) != 1) {
         // Eliminar cualquier carácter restante
         while (getchar() != '\n');
-        printf("Entrada inválida. Intente de nuevo.\n");
+        printf("Entrada invalida. Intente de nuevo.\n");
         return Head;
     }
     while (getchar() != '\n'); // limpiar buffer

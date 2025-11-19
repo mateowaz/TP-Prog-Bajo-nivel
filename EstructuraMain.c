@@ -6,6 +6,7 @@
 #include "funciones.h"
 #define MAX_NOMBRE 30
 
+void VerAlumnosDeMat(Nodo *Head);
 
 int main(){
   Nodo *Lista = NULL;
