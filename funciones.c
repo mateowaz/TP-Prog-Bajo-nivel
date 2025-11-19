@@ -77,7 +77,7 @@ Nodo* CargarDatosIniciales(Nodo *Head) {
         Head = agregar(copiar_estudiante(a), tipo_Alumno, Head);
     }
     
-    printf("\n--- Carga Automática de Datos Finalizada ---\n");
+    printf("\n--- Carga Automatica de Datos Finalizada ---\n");
     return Head;
 }
 
@@ -336,7 +336,7 @@ Nodo *DarDeAltaMateria(Nodo *Head)
 
   Nodo *MateriaRepetida = BuscarMatPorNombre(Head, NuevaMateria.nombre);
   if(MateriaRepetida != NULL){
-    printf("Error: Materia %s ya existe", NuevaMateria.nombre);
+    printf("Error: Materia %s ya existe en los datos", NuevaMateria.nombre);
     return Head;
   }
   NuevaMateria.correlativa_requerida[0] = '\0';
@@ -361,7 +361,7 @@ void ListarMat(Nodo *Head){
   printf("--- Inicio de la Lista ---\n");
 
   if (Head == NULL) {
-        printf("La lista de materias está vacía.\n");
+        printf("La lista de materias está vacia.\n");
         return;
     }
 
@@ -411,7 +411,7 @@ Nodo *EliminarMat(Nodo *Head){
   if (scanf("%29s", nombEliminar) != 1) {
     //eliminar cualquier carácter restante
      int c; while ((c = getchar()) != '\n' && c != EOF);
-        printf("Entrada inválida o error de lectura.\n");
+        printf("Entrada invalida o error de lectura.\n");
         return Head;
     }
     //limpiar buffer después de scanf
@@ -505,7 +505,7 @@ void AnotarseMateria(Nodo *Head) {
     Nodo *nodoAlumnoEncontrado = NULL; 
     Nodo *nodoMateriaEncontrada = NULL;
 
-    printf("\n--- Inscripción a Materia ---\n");
+    printf("\n--- Inscripcion a Materia ---\n");
     
     //obtener legajo del alumno
     printf("Ingrese el Legajo del Alumno a inscribir: ");

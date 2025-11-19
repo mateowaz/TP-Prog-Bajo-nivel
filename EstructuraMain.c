@@ -7,12 +7,6 @@
 #define MAX_NOMBRE 30
 
 
-void VerAlumnosDeMat(Nodo *Head); 
-void AnotarseMateria(Nodo *Head);
-Nodo *ObtenerUltimo(Nodo *Head);
-Nodo *BuscarPorLegajo(Nodo *Head, int LegajoBusc);
-Nodo* BuscarPorNombre(Nodo *Head, char *nombBuscado);
-
 int main(){
   Nodo *Lista = NULL;
   int opcionPrincipal = 0;
@@ -88,12 +82,12 @@ int main(){
           printf("Ingrese el rango maximo: \n");
           if (scanf("%d", &maxEdad) != 1) {
           while (getchar() != '\n');
-            printf("Entrada máxima invalida.\n");
+            printf("Entrada maxima invalida.\n");
             break;
             }
             while (getchar() != '\n');
           if (minEdad > maxEdad) {
-            printf("El rango mínimo no puede ser mayor que el máximo.\n");
+            printf("El rango minimo no puede ser mayor que el maximo.\n");
          break;
     }
             
@@ -229,6 +223,6 @@ void MostrarMenuEstudiantes(){
     printf("6. Buscar Alumnos por Edad\n");
     printf("7. Eliminar Alumno\n");
     printf("0. Volver\n");
-    printf("Ingrese su opción: ");
+    printf("Ingrese su opcion: ");
 }
 
