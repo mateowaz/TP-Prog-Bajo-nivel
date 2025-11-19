@@ -109,7 +109,7 @@ int main(){
             break;
         
         default:
-            printf("\nOpción no válida. Intente de nuevo.\n");
+            printf("\nOpcion no valida. Intente de nuevo.\n");
             break;
 
         }
@@ -172,11 +172,11 @@ int main(){
         break;
         
         case 0: 
-            printf("\nVolviendo al Menú Principal...\n");
+            printf("\nVolviendo al Menu Principal...\n");
             break;
 
         default:
-                printf("\nOpción no válida. Intente de nuevo.\n");
+                printf("\nOpcion no valida. Intente de nuevo.\n");
                 break;
         } 
     
@@ -198,7 +198,7 @@ void MostrarMenu(){
     printf("1. Mostrar Menu de Alumnos\n");
     printf("2. Mostrar Menu de Materias\n");
     printf("0. Salir\n");
-    printf("Ingrese su opción: ");
+    printf("Ingrese su opcion: ");
 }
 
 void MostrarMenuMaterias(){
@@ -213,8 +213,8 @@ void MostrarMenuMaterias(){
     printf("6. Anotarse a Materia\n");
     printf("7. Rendir Materia\n");
     printf("8. Ver Alumnos De Materia\n");
-    printf("0. Salir\n");
-    printf("Ingrese su opción: ");
+    printf("0. Volver\n");
+    printf("Ingrese su opcion: ");
 }
 
 void MostrarMenuEstudiantes(){
@@ -228,7 +228,7 @@ void MostrarMenuEstudiantes(){
     printf("5. Buscar Alumno por Nombre\n");
     printf("6. Buscar Alumnos por Edad\n");
     printf("7. Eliminar Alumno\n");
-    printf("0. Salir\n");
+    printf("0. Volver\n");
     printf("Ingrese su opción: ");
 }
 
