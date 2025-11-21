@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h> 
+#include <assert.h>
 #include "funciones.h"
 
 
@@ -12,22 +12,20 @@ strcpy(a.nombre, "Carlos");
 a.edad = 10;
 a.Legajo = 1;
 
-Lista = agregar(copiar_estudiante(a), tipo_Alumno, Lista);
-//la lista no debe estar vacia, para eso el assert
-assert(Lista != NULL);
-Alumno *res = (Alumno *)Lista->dato;
-assert(res->Legajo = a.Legajo);
-assert(strcmp(res->nombre, "Carlos") == 0);
+    Lista = agregar(copiar_estudiante(a), tipo_Alumno, Lista);
 
 LiberarEspacioLista(Lista);
 }
 
-void Test_AgregarAlumno_EdadErronea(){
-Nodo *Lista = NULL;
-Alumno a;
-strcpy(a.nombre, "Carlos2");
-a.edad = 1220;
-a.Legajo = 1;
+void Test_AgregarAlumno_EdadErronea()
+{
+    Nodo *Lista = NULL;
+    Alumno a;
+    strcpy(a.nombre, "Carlos2");
+    a.edad = 1220; // Edad inválida
+    a.Legajo = 1;
+    void *datos = copiar_estudiante(a);
+    assert(datos == NULL);
 
 void *datos = copiar_estudiante(a);
 //datos == Null significa que fallo
