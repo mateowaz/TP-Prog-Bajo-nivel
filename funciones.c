@@ -45,7 +45,7 @@ Nodo *CargarDatosIniciales(Nodo *Head)
     {
       sufijo = "VI";
     }
-    // 1. Generar el nombre combinando la base y el sufijo
+    //generamos el nombre combinando la base y el sufijo
     snprintf(m.nombre, MAX_NOMBRE, "%s %s", nombres_base[i % 15], sufijo);
 
     // asignamos una correlativa simple
@@ -56,7 +56,7 @@ Nodo *CargarDatosIniciales(Nodo *Head)
     }
     else
     {
-      m.correlativa_requerida[0] = '\0'; // No tiene correlativa
+      m.correlativa_requerida[0] = '\0'; // no tiene correlativa
     }
 
     m.cantidadAlumnos = 0;
@@ -78,7 +78,7 @@ Nodo *CargarDatosIniciales(Nodo *Head)
 
     snprintf(a.nombre, MAX_NOMBRE, "%s %s", nombrePila, apellido);
 
-    a.edad = 18 + (rand() % 5);
+    a.edad = 18 + (rand() % 10);
     a.promedio = 4.00 + (float)(rand() % 400) / 100.0; // promedio entre 4.00 y 9.99
     a.Legajo = legajoActual++;                         // legajo único
 
@@ -1273,7 +1273,6 @@ Nodo *EliminarEst(Nodo *Head)
 Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado)
 {
   Nodo *indice = Head;
-  printf("Ingrese el Nombre del Alumno: ");
   while (indice != NULL)
   {
     if (indice->tipo == tipo_Alumno)
@@ -1282,7 +1281,6 @@ Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado)
 
       if (strcmp(alum->nombre, nombBuscado) == 0)
       {
-        printf("Alumno %s encontrado.\n", alum->nombre);
         printf("- Datos de Alumno - \n");
         printf("Nombre: %s, Edad: %d, Promedio: %f, Legajo: %d ", alum->nombre, alum->edad, alum->promedio, alum->Legajo);
         return indice;

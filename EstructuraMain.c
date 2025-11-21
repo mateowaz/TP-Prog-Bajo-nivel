@@ -57,15 +57,19 @@ int main(){
             char nombreBuscado[50]; //Maximo de la entrada
 
             printf("Ingrese el Nombre del Alumno a buscar: ");
-            scanf("%s", nombreBuscado); // Lee el nombre ingresado por el usuario
-            while (getchar() != '\n'); // Limpiar el buffer
+           //buscamos el nombre
+           if (fgets(nombreBuscado, MAX_NOMBRE, stdin) != NULL) {
+           //eliminamos el salto de linea que agrega fgets porque tira error
+           size_t len = strlen(nombreBuscado);
+           if (len > 0 && nombreBuscado[len - 1] == '\n') {
+            nombreBuscado[len - 1] = '\0';
+             }
+           }
 
             //llamada a la funcion
             Nodo *encontrado = BuscarPorNombre(Lista, nombreBuscado);
 
-            // Manejar el resultado de la búsqueda si es necesario
             if (encontrado != NULL) {
-            // Ya se imprimió la información en BuscarPorNombre
                         }
             break;
         
@@ -74,7 +78,7 @@ int main(){
           int maxEdad;
           printf("Ingrese el rango de edad de los Alumnos a buscar: \n");
           printf("Ingrese el rango minimo: \n");
-          if (scanf("%d", &maxEdad) != 1) {
+          if (scanf("%d", &minEdad) != 1) {
           while (getchar() != '\n');
             printf("Entrada minima invalida.\n");
             break;
@@ -139,10 +143,21 @@ int main(){
         case 3:
         char nombreBuscado[50];
         printf("Ingrese el Nombre de la Materia a buscar: ");
-        scanf("%s", nombreBuscado);
-        while (getchar() != '\n');
+
+        //buscamos el nombre
+       if (fgets(nombreBuscado, MAX_NOMBRE, stdin) != NULL) {
+        //eliminamos el salto de linea que agrega fgets porque tira error
+        size_t len = strlen(nombreBuscado);
+        if (len > 0 && nombreBuscado[len - 1] == '\n') {
+            nombreBuscado[len - 1] = '\0';
+        }
+       }
 
         Nodo *encontrado = BuscarMatPorNombre(Lista, nombreBuscado); 
+        if (encontrado != NULL) {
+        Materia *m = (Materia*)encontrado->dato;
+        printf("Materia encontrada: %s (Alumnos: %d)\n", m->nombre, m->cantidadAlumnos);
+         }
         break;
         
         case 4:   
