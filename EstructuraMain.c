@@ -100,7 +100,7 @@ int main(){
         break;
                 
         case 0:
-            printf("\nVolviendo al Menú Principal...\n");
+            printf("\nVolviendo al Menu Principal...\n");
             break;
         
         default:

@@ -11,8 +11,8 @@ Nodo* CargarDatosIniciales(Nodo *Head) {
     int CantMaterias = 0;
     
     //generacion de materias
-    printf("\n--- Generando 1000 Materias ---\n");
-    for (i = 0; i < 1000; i++) {
+    printf("\n--- Generando 100 Materias ---\n");
+    for (i = 0; i < 100; i++) {
         Materia m;
         //creamos un nombre único 
         const char *sufijo;
@@ -37,14 +37,10 @@ Nodo* CargarDatosIniciales(Nodo *Head) {
         snprintf(m.nombre, MAX_NOMBRE, "%s %s", nombres_base[i % 15], sufijo);
 
         
-
-       
-        
-        
         // asignamos una correlativa simple 
         if (i > 0) {
             // asigna la materia anterior como prerrequisito
-            snprintf(m.correlativa_requerida, MAX_NOMBRE, "%s", nombres_base[(i - 1) % 15]);
+         snprintf(m.correlativa_requerida, MAX_NOMBRE, "%s", nombres_base[(i - 1) % 15]);
         } else {
             m.correlativa_requerida[0] = '\0'; // No tiene correlativa
         }
@@ -56,17 +52,17 @@ Nodo* CargarDatosIniciales(Nodo *Head) {
     }
     
   
-    printf("\n--- Generando 2000 Alumnos ---\n");
-    for (i = 0; i < 2000; i++) {
+    printf("\n--- Generando 200 Alumnos ---\n");
+    for (i = 0; i < 200; i++) {
         Alumno a;
         
-        // generamos un nombre completo aleatorio
+        // generamos un nombre completo aleatorio           usa los nombres y apellidos
         const char *nombrePila = nombres_alumnos[rand() % (sizeof(nombres_alumnos) / sizeof(nombres_alumnos[0]))];
         const char *apellido = apellidos_alumnos[rand() % (sizeof(apellidos_alumnos) / sizeof(apellidos_alumnos[0]))];
-        
+        //los imprime
         snprintf(a.nombre, MAX_NOMBRE, "%s %s", nombrePila, apellido);
         
-        a.edad = 18 + (rand() % 5); 
+        a.edad = 18 + (rand() % 20); 
         a.promedio = 4.00 + (float)(rand() % 400) / 100.0; // promedio entre 4.00 y 9.99
         a.Legajo = legajoActual++; // legajo único
         

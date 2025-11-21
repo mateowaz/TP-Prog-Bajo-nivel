@@ -4,6 +4,7 @@
 #include <assert.h> 
 #include "funciones.h"
 
+
 void Test_AgregarAlumno(){
 Nodo *Lista = NULL;
 Alumno a;
@@ -17,7 +18,6 @@ assert(Lista != NULL);
 Alumno *res = (Alumno *)Lista->dato;
 assert(res->Legajo = a.Legajo);
 assert(strcmp(res->nombre, "Carlos") == 0);
-printf("Test de Agregar Alumno Pasado\n");
 
 LiberarEspacioLista(Lista);
 }
@@ -74,6 +74,7 @@ LiberarEspacioLista(Lista);
 int main(){
 printf("Empezando Los Test\n");
 Test_AgregarAlumno();
+printf("Test de Agregar Alumno Pasado\n");
 Test_AgregarAlumno_EdadErronea();
 Test_BuscarAlumnoPorLegajo();
 Test_BuscarAlumnoPorLegajoError();
