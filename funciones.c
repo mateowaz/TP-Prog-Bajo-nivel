@@ -1039,6 +1039,8 @@ Nodo *DarDeAlta(Nodo *Head)
   Nodo *alumnoDuplicado = NULL;
   int c;
   int EdadValida;
+  int LegajoValido = 0;
+  char NombreValido;
 
   printf("Porfavor ingrese sus datos: \n");
   printf("Nombre: ");
@@ -1066,18 +1068,27 @@ Nodo *DarDeAlta(Nodo *Head)
   do
   {
     printf("Legajo: ");
-    scanf("%d", &NuevoAlumno.Legajo);
+    if(scanf("%d", &NuevoAlumno.Legajo) == 1){
+      if(NuevoAlumno.Legajo < 0){
+        printf("El Legajo debe ser Positivo\n");
+      }else{
+        LegajoValido = 1;
+      }
+    }else{
+      printf("Tiene que ser un Legajo con Numeros\n");
+      while ((c = getchar()) != '\n' && c != EOF);
+    }
     alumnoDuplicado = (Nodo *)1;
     continue;
-  } while ((c = getchar()) != '\n' && c != EOF);
+
+  }while(LegajoValido == 0);
 
   alumnoDuplicado = BuscarPorLegajo(Head, NuevoAlumno.Legajo);
   if (alumnoDuplicado != NULL)
   {
     printf("Este Legajo ya exite, intente otro");
   }
-  while (alumnoDuplicado != NULL)
-    ;
+  while (alumnoDuplicado != NULL);
 
   NuevoAlumno.promedio = 0.0;
 
