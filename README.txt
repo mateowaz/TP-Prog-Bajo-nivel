@@ -17,5 +17,6 @@ Profesor: Martín Rodríguez
 
 * tests unitarios.
 
-* Persistencia en CSV
+// Otras Ideas Implementadas //
+* cada estudiante de prueba se anota a una materia de prueba al iniciar el programa
  

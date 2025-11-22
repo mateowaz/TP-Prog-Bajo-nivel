@@ -26,8 +26,7 @@ void Test_AgregarAlumno_EdadErronea()
     a.Legajo = 1;
     void *datos = copiar_estudiante(a);
     assert(datos == NULL);
-
-void *datos = copiar_estudiante(a);
+    
 //datos == Null significa que fallo
 assert(datos == NULL);
 Lista = agregar(copiar_estudiante(a), tipo_Alumno, Lista);
