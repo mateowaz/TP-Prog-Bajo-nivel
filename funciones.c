@@ -1202,7 +1202,6 @@ void BuscarPorEdad(Nodo *Head, int minEdad, int maxEdad)
       Alumno *e = (Alumno *)indice->dato;
       if (e->edad >= minEdad && e->edad <= maxEdad)
       {
-        printf("Los alumnos son: \n");
         printf("Nombre: %s, Edad: %d, Legajo: %d\n",
                e->nombre, e->edad, e->Legajo);
         contador++;
@@ -1284,6 +1283,8 @@ Nodo *EliminarEst(Nodo *Head)
 Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado)
 {
   Nodo *indice = Head;
+  int encontrados = 0;
+  Nodo *primerEncontrado = NULL;
   while (indice != NULL)
   {
     if (indice->tipo == tipo_Alumno)
@@ -1292,15 +1293,26 @@ Nodo *BuscarPorNombre(Nodo *Head, char *nombBuscado)
 
       if (strcmp(alum->nombre, nombBuscado) == 0)
       {
+        printf("\n--------------------------------\n");
         printf("- Datos de Alumno - \n");
         printf("Nombre: %s, Edad: %d, Promedio: %f, Legajo: %d ", alum->nombre, alum->edad, alum->promedio, alum->Legajo);
-        return indice;
+        printf("\n--------------------------------\n");
+        if (primerEncontrado == NULL) {
+                    primerEncontrado = indice;
+                }
+        encontrados++;
       }
+
     }
     indice = indice->siguiente;
   }
-  printf("Alumno no encontrado");
+  if(encontrados == 0){
+    printf("Alumno no encontrado");
   return NULL;
+  }
+  printf("\n--------------------------------\n");
+        printf("Se encontraron %d alumnos con ese nombre.\n", encontrados);
+        return primerEncontrado;
 }
 
 Nodo *EliminarPorLegajoDeMateria(Nodo *Head, int LegajoBus)
