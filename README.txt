@@ -3,8 +3,7 @@
 Alumnos: Mateo Waizel, Juan Manuel Fernandez
 Profesor: Martín Rodríguez
 
-
-
+-El Programa puede soportar grandes cantidades de alumnos y materias, nuestras pruebas fueron con mas de 1000 alumnos y materias-
 
 
 // Ideas no-obligatorias implementadas //
